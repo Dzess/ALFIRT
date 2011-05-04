@@ -1,7 +1,8 @@
 .classpath
+*.pyc
+*.pyd
 .metadata/
 .settings/
 target/
-
 .class
 *~
