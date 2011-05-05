@@ -21,18 +21,36 @@ class ImageDescriptionReader(object):
     
     def read(self,fileStream):
         '''
-        reads the file searching for the 
+        Reads the file searching for the elements, and returning the common image
+        description format instance 
         '''
-        return ImageDescription
+        lines = fileStream.readlines()
+        # first line is @name
+        name = lines[1].rstrip()
+        # third line is @translate
+        x = float(lines[3])
+        y = float(lines[4])
+        z = float(lines[5])
+        
+        # seventh line is rotate
+        p = float(lines[7])
+        q = float(lines[8])
+        r = float(lines[9])
+        
+        # now data
+        #numberOfPoints = int(lines[11])
+        points = []
+        
+        return ImageDescription(name,x,y,z,p,q,r,points)
 
 class ImageDescriptionReaderUnitTests(unittest.TestCase):
     def setUp(self):
         # set up example data
         self.name = "sample_image"
-        self.x = 0
+        self.x = 0.0
         self.y = 0.5
         self.z = 0.75
-        self.p = 0
+        self.p = 0.0
         self.q = 0.25
         self.r = 0.85
         self.points = [0.0, 1.0, 2.0, 3.0]
@@ -75,6 +93,9 @@ sample_image
             # read this file using reader
             reader = ImageDescriptionReader()
             readImage = reader.read(file)
+        
+        print readImage
+        print self.expectedImage
         
         # compare the image objects
         self.assertEqual(self.expectedImage, readImage, "The values should be identical")

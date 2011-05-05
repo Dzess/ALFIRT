@@ -28,12 +28,27 @@ class ImageDescription(object):
         if len(points) % 2 == 1 :
             raise ValueError("The odd number of coordinates is abnormal")
         self.points = points
-    
+        
     def __eq__(self, o):
-        return self.x == o.x and self.y == o.y and self.z == o.z and self.p == o.p and self.q == o.p and self.r == o.r and self.name == o.name
+        if not isinstance(o,self.__class__) :
+            return False
+        # TODO: add the points comparison
+        return self.x == o.x and self.y == o.y and self.z == o.z and self.p == o.p and self.q == o.q and self.r == o.r and self.name == o.name
     
     def __ne__(self, o):
         return not self == o
+    
+    def __repr__(self):
+        string  = "Name: " + str(self.name) + "\n" 
+        string += "X: " + str(self.x) + "\n"
+        string += "Y: " + str(self.y) + "\n"
+        string += "Z: " + str(self.z) + "\n"
+        string += "P: " + str(self.p) + "\n"
+        string += "Q: " + str(self.q) + "\n"
+        string += "R: " + str(self.r) + "\n"
+        
+        return  string
+        
         
 class ImageDescriptionUnitTests(unittest.TestCase):
         def setUp(self):                
