@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>alfirt.common</name>
+	<name>alfirt.generator</name>
 	<comment></comment>
 	<projects>
+		<project>alfirt.common</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
