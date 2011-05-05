@@ -15,7 +15,8 @@ class ImageDescription(object):
     def __init__(self,name, x,  y,  z,
                   p,  q,  r, points):
         '''
-        Constructor
+        Constructor. Creates the immutable object of the image values with
+        passed arguments.
         '''
         self.name = name
         self.x = x
@@ -28,6 +29,11 @@ class ImageDescription(object):
             raise ValueError("The odd number of coordinates is abnormal")
         self.points = points
     
+    def __eq__(self, o):
+        return self.x == o.x and self.y == o.y and self.z == o.z and self.p == o.p and self.q == o.p and self.r == o.r and self.name == o.name
+    
+    def __ne__(self, o):
+        return not self == o
         
 class ImageDescriptionUnitTests(unittest.TestCase):
         def setUp(self):                
@@ -43,9 +49,12 @@ class ImageDescriptionUnitTests(unittest.TestCase):
             
         def testtextInsteadOfNumbersOnAxis(self):
             '''
-            checks if the passed values are correct
+            checks if the passed values of axis are correct (within 0..1)
             '''
-            #TODO: check the fields about the 
+            # TODO: get the automation of this process via reflection ? or something like this
+            self.x = "some text"
+            with self.assertRaises(ValueError) : 
+                ImageDescription(self.name,self.x,self.y,self.z,self.p,self.q,self.r,self.points)
             pass
         
         def testOutputWithOddNumberOfPonts(self):
