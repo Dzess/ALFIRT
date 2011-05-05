@@ -5,6 +5,10 @@ Created on 04-05-2011
 '''
 import unittest
 
+
+
+
+
 class ImageDescription(object):
     '''
     Class represents the image characteristics from the 
@@ -19,15 +23,24 @@ class ImageDescription(object):
         passed arguments.
         '''
         self.name = name
-        self.x = x
-        self.y = y
-        self.z = z
-        self.p = p
-        self.q = q
-        self.r = r
+        self.x = self.readAxis(x)
+        self.y = self.readAxis(y)
+        self.z = self.readAxis(z)
+        self.p = self.readAxis(p)
+        self.q = self.readAxis(q)
+        self.r = self.readAxis(r)
         if len(points) % 2 == 1 :
             raise ValueError("The odd number of coordinates is abnormal")
         self.points = points
+
+    def readAxis(self,n):
+        '''
+        checks if the passed value is within 0-1 range
+        @param n: the number whish need to be passed to axis 
+        '''
+        if (n > 1) or ( n < 0 ):
+            raise ValueError("The value of the axis should be within [0..1]")
+        return n
         
     def __eq__(self, o):
         if not isinstance(o,self.__class__) :
@@ -61,6 +74,13 @@ class ImageDescriptionUnitTests(unittest.TestCase):
             self.q = 0.25
             self.r = 0.85
             self.points = [0.0, 1.0, 2.0, 3.0]
+        
+        def testEqualityComparisionOnPoints(self):
+            '''
+            checks if the points are used for comparison
+            '''
+            # TODO: write this kind of test
+            pass
             
         def testtextInsteadOfNumbersOnAxis(self):
             '''
