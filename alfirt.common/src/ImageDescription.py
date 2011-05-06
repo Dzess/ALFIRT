@@ -45,11 +45,20 @@ class ImageDescription(object):
     def __eq__(self, o):
         if not isinstance(o,self.__class__) :
             return False
-        # TODO: add the points comparison
-        return self.x == o.x and self.y == o.y and self.z == o.z and self.p == o.p and self.q == o.q and self.r == o.r and self.name == o.name
+        return self.x == o.x and self.y == o.y and self.z == o.z and self.p == o.p and self.q == o.q and self.r == o.r and self.name == o.name and self.points == o.points
     
     def __ne__(self, o):
         return not self == o
+    
+    def getPoints(self):
+        '''
+        Returns the string with the points
+        '''
+        points = "Points: \n"
+        for point in self.points:
+            points += str(point) + " "
+        points += '\n'
+        return points
     
     def __repr__(self):
         string  = "Name: " + str(self.name) + "\n" 
@@ -59,7 +68,7 @@ class ImageDescription(object):
         string += "P: " + str(self.p) + "\n"
         string += "Q: " + str(self.q) + "\n"
         string += "R: " + str(self.r) + "\n"
-        
+        string += self.getPoints()
         return  string
         
         
@@ -75,11 +84,25 @@ class ImageDescriptionUnitTests(unittest.TestCase):
             self.r = 0.85
             self.points = [0.0, 1.0, 2.0, 3.0]
         
+        def testEqualityOnAllProperties(self):
+            '''
+            tests the equality comparer
+            '''
+            imag1 = ImageDescription(self.name,self.x,self.y,self.z,self.p,self.q,self.r,self.points)
+            imag2 = ImageDescription(self.name,self.x,self.y,self.z,self.p,self.q,self.r,self.points)
+            
+            self.assertEqual(imag1, imag2, "The images are equal")
+            pass
+        
         def testEqualityComparisionOnPoints(self):
             '''
             checks if the points are used for comparison
             '''
-            # TODO: write this kind of test
+            points2 = [0.0, 2.0]
+            imag1 = ImageDescription(self.name,self.x,self.y,self.z,self.p,self.q,self.r,self.points)
+            imag2 = ImageDescription(self.name,self.x,self.y,self.z,self.p,self.q,self.r,points2)
+            
+            self.assertNotEqual(imag1, imag2, "Image description are different because of the mask")
             pass
             
         def testtextInsteadOfNumbersOnAxis(self):
