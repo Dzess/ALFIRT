@@ -4,8 +4,6 @@ Created on 04-05-2011
 @author: Piotr
 '''
 import unittest
-import inspect
-
 
 class ImageDescription(object):
     '''
@@ -108,6 +106,15 @@ class ImageDescriptionUnitTests(unittest.TestCase):
             self.assertNotEqual(imag1, imag2, "Image description are different because of the mask")
             pass
             
+        def testNotSameInstanceBeingCompared(self):
+            '''
+            check if passing some other object and ImageDescription results in nice False message
+            '''
+            imag1 = ImageDescription(self.name,self.x,self.y,self.z,self.p,self.q,self.r,self.points)
+            imag2 = [2.0,3.0]
+            self.assertNotEqual(imag1, imag2, "Thie values should not be equal, nor exception should be thrown") 
+            pass
+        
         def testAllAxisArgumentsMustBeANumber(self):
             '''
             checks if the values provided within the axis parameters are numbers
@@ -142,3 +149,5 @@ class ImageDescriptionUnitTests(unittest.TestCase):
                             self.p,self.q,self.r,self.points)
             pass
         
+if (__name__ == 'main'):
+    unittest.main(verbosity=2)

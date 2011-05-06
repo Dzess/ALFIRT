@@ -56,7 +56,9 @@ class ImageDescriptionWriter(object):
             self.writeline(str(imageDescription.points[i]))
         
         
-       
+#===============================================================================
+# UnitTests
+#===============================================================================   
 class ImageDescriptionWriterUnitTests(unittest.TestCase):
     
     def setUp(self):
@@ -91,10 +93,7 @@ sample_image
 """
     
     def tearDown(self):
-        try:
-            os.remove(self.fileName)
-        except StandardError:
-            pass
+        os.remove(self.fileName)
             
     def testOutputWithAllElement(self):
         '''
@@ -118,6 +117,9 @@ sample_image
         self.assertEqual(self.expectedString, allLines , "Provided strings should be identical")
         pass
     
+#===============================================================================
+# Runner for unittest
+#===============================================================================   
 if (__name__ == 'main'):
     unittest.main(verbosity=2)
     

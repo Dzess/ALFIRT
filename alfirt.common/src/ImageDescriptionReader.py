@@ -47,6 +47,9 @@ class ImageDescriptionReader(object):
         
         return ImageDescription(name,x,y,z,p,q,r,points)
 
+#===============================================================================
+# UnitTests
+#===============================================================================   
 class ImageDescriptionReaderUnitTests(unittest.TestCase):
     def setUp(self):
         # set up example data
@@ -104,6 +107,9 @@ sample_image
         # compare the image objects
         self.assertEqual(self.expectedImage, readImage, "The values should be identical")
         pass 
-    
+
+#===============================================================================
+# Runner for unittest
+#===============================================================================   
 if (__name__ == 'main'):
     unittest.main(verbosity=2)
