@@ -4,42 +4,45 @@ Created on 04-05-2011
 @author: Piotr
 '''
 import unittest
-
-
-
+import inspect
 
 
 class ImageDescription(object):
     '''
     Class represents the image characteristics from the 
-    learning point of view.
+    learning point of view. 
     '''
-
-
+    
     def __init__(self,name, x,  y,  z,
                   p,  q,  r, points):
         '''
         Constructor. Creates the immutable object of the image values with
         passed arguments.
+        @param name: the name of the image
+        @param x: x coordinate in translation vector
+        @param y: y coordinate in translation vector
+        @param z: z coordinate in translation vector
+        
+        TODO: add better description of latter elements
         '''
         self.name = name
-        self.x = self.readAxis(x)
-        self.y = self.readAxis(y)
-        self.z = self.readAxis(z)
-        self.p = self.readAxis(p)
-        self.q = self.readAxis(q)
-        self.r = self.readAxis(r)
+        self.x = self.validate(x)
+        self.y = self.validate(y)
+        self.z = self.validate(z)
+        self.p = self.validate(p)
+        self.q = self.validate(q)
+        self.r = self.validate(r)
         if len(points) % 2 == 1 :
             raise ValueError("The odd number of coordinates is abnormal")
         self.points = points
 
-    def readAxis(self,n):
+    def validate(self,n):
         '''
-        checks if the passed value is within 0-1 range
-        @param n: the number whish need to be passed to axis 
+        Checks if the passed value is number
+        @param n: the number which need to be passed to axis 
         '''
-        if (n > 1) or ( n < 0 ):
-            raise ValueError("The value of the axis should be within [0..1]")
+        if not isinstance(n,(float,int,long)) :
+            raise ValueError("The value passed should be number")
         return n
         
     def __eq__(self, o):
@@ -105,14 +108,19 @@ class ImageDescriptionUnitTests(unittest.TestCase):
             self.assertNotEqual(imag1, imag2, "Image description are different because of the mask")
             pass
             
-        def testtextInsteadOfNumbersOnAxis(self):
+        def testAllAxisArgumentsMustBeANumber(self):
             '''
-            checks if the passed values of axis are correct (within 0..1)
+            checks if the values provided within the axis parameters are numbers
             '''
-            # TODO: get the automation of this process via reflection ? or something like this
-            self.x = "some text"
-            with self.assertRaises(ValueError) : 
-                ImageDescription(self.name,self.x,self.y,self.z,self.p,self.q,self.r,self.points)
+            value = "some_text_which_is_not_a_number"
+            numberParameters = [ 'x', 'y', 'z','p','q','r']
+            for index in range(0,len(numberParameters)):
+                args = [self.name,self.x,self.y,self.z,self.p,self.q,self.r,self.points]
+                # manipulate argument list to get the specified pa
+                args[index+1] = value
+                with self.assertRaises(ValueError) : 
+                    ImageDescription(*args)    
+                pass
             pass
         
         def testOutputWithOddNumberOfPonts(self):
