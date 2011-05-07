@@ -6,8 +6,11 @@ command line. Takes command line arguments.
 
 @author: Piotr
 '''
+from ArgumentParser import ArgumentParser
+import sys
 
 if __name__ == '__main__':
     print "Welcome to ALFIRT project v.0.1 alfa"
-    
+    # TODO: write the main logic of the runner
+    #parser = ArgumentParser(sys.argv)
     pass
