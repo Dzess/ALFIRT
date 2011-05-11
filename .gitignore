@@ -6,5 +6,5 @@
 target/
 .class
 *~
-
+renders/
 *.pyc

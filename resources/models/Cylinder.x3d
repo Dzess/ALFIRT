@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<X3D>
+  <Scene>
+   <Shape>
+    <Appearance>
+     <Material  diffuseColor="0.1 0.1 0.9"/>
+    </Appearance>
+    <Cylinder radius="0.5" height="2"/>
+   </Shape>
+  </Scene>
+</X3D>
