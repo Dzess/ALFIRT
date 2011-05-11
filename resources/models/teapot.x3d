@@ -21,7 +21,7 @@ Index for DEF nodes: APP01, Teapot01-COORD
 Index for Viewpoint image: Viewpoint_1 
  --> 
  <Scene> 
- <Viewpoint alfirt:camera="" description='Hello CAD teapot' position='0 0 35' fieldOfView='0.7854'/> 
+ <Viewpoint  description='Hello CAD teapot' position='0 0 35' fieldOfView='0.7854'/> 
  <CADLayer name='TopLayer' containerField='children'> 
  <CADAssembly containerField='children'> 
  <CADPart name='Body' center='0 0 0' rotation='0 0 1 0' scale='1 1 1' scaleOrientation='0 0 1 0' translation='0 0 0' containerField='children'> 

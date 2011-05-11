@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<X3D>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.1//EN" "http://www.web3d.org/specifications/x3d-3.1.dtd">
+<X3D xmlns:alfirt="ALFIRT-NAMESPACE">
 <Scene>
 <!--
 	Add XML attribytes for the placment of camera, and the placment of the element
 -->
-	<Viewpoint description='Rear View' orientation='0 1 0 3.14159' position='0 0 -10'/> 
+	<Viewpoint alfirt:camera="true" description='Rear View' orientation='0 1 0 3.14159' position='0 0 -10'/> 
                       <Transform  translation="0.0 0.15 0.0" rotation="1.0 0.0 0.0  4.71239" scale="2.0 2.0 2.0">
                           <StaticGroup>
                               <Shape>
