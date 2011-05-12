@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.2//EN" "http://www.web3d.org/specifications/x3d-3.2.dtd">
+ 
+<X3D profile="Interchange" 
+version="3.2" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:alfirt="ALFIRT" 
+xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd ">
+<Scene>
+  <Viewpoint alfirt:camera="6 7 8 0.4 0.2 0.3" description='Rear View' orientation='0 1 0 3.14159' position='0 0 -10'/> 
+  <Shape alfirt:anchor="0 1 2 0.4 0.2 0.3">
+    <IndexedFaceSet coordIndex="0 1 2">
+      <Coordinate point="0 0 0 1 0 0 0.5 1 0"/>
+    </IndexedFaceSet>
+  </Shape>
+</Scene>
+</X3D>
