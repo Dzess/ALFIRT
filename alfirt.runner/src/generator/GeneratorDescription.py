@@ -6,7 +6,7 @@ Created on 11-05-2011
 
 class GeneratorDescription(object):
     '''
-    Describes the generator settings
+    Describes the generator settings. Uses back end for polar - euclidian system
     '''
 
     def __init__(self, alfa, beta, radius):
