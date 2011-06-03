@@ -5,6 +5,7 @@ Created on 12-05-2011
 '''
 import unittest
 
+
 class PolarSystem(object):
     '''
     Transforms from 3D polar system to karthesian one.
@@ -98,3 +99,4 @@ class PolarSystemUnitTests(unittest.TestCase):
 #===============================================================================
 if (__name__ == 'main'):
     unittest.main(verbosity=2)
+

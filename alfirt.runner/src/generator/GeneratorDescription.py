@@ -6,7 +6,7 @@ Created on 11-05-2011
 
 class GeneratorDescription(object):
     '''
-    Describes the generator settings. Uses back end for polar - euclidian system
+    Describes the generator settings. Uses back end for polar - euclidian system.
     '''
 
     def __init__(self, alfa, beta, radius):
@@ -22,16 +22,3 @@ class GeneratorDescription(object):
 
         pass
 
-class GeneratorInterval(object):
-    '''
-    Describes the interval in generation
-    '''
-
-    def __init__(self, start, stop):
-        '''
-        Constructor.
-        @param start: starting point of the interval
-        @param stop: stopping point of the interval 
-        '''
-        self.start = start
-        self.stop = stop
