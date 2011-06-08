@@ -19,6 +19,7 @@ class TagReaderX3D(object):
     Reads the data stream gets the ALFIRT tags from XML document. 
     '''
 
+    namespace = "ALFIRT"
 
     def __init__(self):
         '''
@@ -68,18 +69,19 @@ class TagReaderX3D(object):
         # find only the fist element
         rootNode = xmldoc.getElementsByTagName("Scene")[0]
         context = xpath.XPathContext()
-        context.namespaces['prefix'] = "ALFIRT"
+        context.namespaces['prefix'] = TagReaderX3D.namespace
         anchor_t_node = context.findnode("//*[@prefix:anchor_translate]", rootNode)
 
         anchor_r_node = context.findnode("//*[@prefix:anchor_rotate]", rootNode)
 
+        # No anchor element found which is mandatory
+        if (anchor_r_node == None) or (anchor_t_node == None):
+            raise ValueError("No anchor element found in the file")
 
         # Read the values from selected nodes
+        translations = anchor_t_node.getAttributeNS(TagReaderX3D.namespace, "anchor_translate").split(' ')
+        rotations = anchor_r_node.getAttributeNS(TagReaderX3D.namespace, "anchor_rotate").split(' ')
 
-        translations = anchor_t_node.attributes['alfirt:anchor_translate'].value.split(' ')
-
-        rotation = anchor_r_node.attributes['alfirt:anchor_rotate']
-        rotations = rotation.value.split(' ')
 
         translate = []
         rotate = []
@@ -171,11 +173,46 @@ xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd 
         '''
             The anchor is required for the polar transformations around the object.
         '''
-        pass
+        # Setting up the X3D string with ALFIRT namespace tags
+        x3dString = """<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.2//EN" "http://www.web3d.org/specifications/x3d-3.2.dtd">
+ 
+<X3D profile="Interchange" 
+version="3.2" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:alfirt="ALFIRT" 
+xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd ">
+<Scene>
+  <Viewpoint description='Rear View' orientation='0 1 0 3.14159' position='0 0 -10'/> 
+  <Shape>
+    <IndexedFaceSet coordIndex="0 1 2">
+      <Coordinate point="0 0 0 1 0 0 0.5 1 0"/>
+    </IndexedFaceSet>
+  </Shape>
+</Scene>
+</X3D>
+        """
+        # Write this file into the data
+        fileName = "test_file_without_anchor"
+        with open(fileName, 'w') as fileStream:
+            fileStream.write(x3dString)
+            fileStream.close()
+
+        # Get reader
+        x3dReader = TagReaderX3D()
+        try:
+            x3dReader.readFile(fileName)
+        except ValueError:
+            return
+        finally:
+            os.remove(fileName)
+
+        self.fail("The exception should have been thrown")
+
 
     def test_reading_file_with_alfirt_tags(self):
         '''
-        Checks if the elements passed in X3D string are correct.
+            Checks if the elements passed in X3D string are correct.
         '''
         x3dReader = TagReaderX3D()
         results = x3dReader.readFile(self.fileName)

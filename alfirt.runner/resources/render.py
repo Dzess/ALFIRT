@@ -6,10 +6,13 @@
 	@contact: dzesse@gmail.com
 	@version: 0.1
 """
-import bpy
-from bpy import context
-from bpy import ops
-from io_scene_x3d import import_x3d
+try:
+	import bpy
+	from bpy import context
+	from bpy import ops
+	from io_scene_x3d import import_x3d
+except ImportError:
+	print ("Importing blender libraries failed")
 
 
 def main():
