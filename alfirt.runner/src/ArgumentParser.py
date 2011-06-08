@@ -6,6 +6,7 @@ Created on 06-05-2011
 import unittest
 from mockito import *
 
+
 class ArgumentParser(object):
     '''
     Class that specifies how the runner should be worked with. During initializations

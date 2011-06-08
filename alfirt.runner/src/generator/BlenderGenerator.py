@@ -49,11 +49,6 @@ class BlenderGenerator(object):
         '''
         pass
 
-    def runRender(self):
-        '''
-        Invokes render 
-        '''
-        pass
 
 #===========================================================================
 #  UnitTests
