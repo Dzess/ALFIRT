@@ -3,6 +3,7 @@ Created on 12-05-2011
 
 @author: Piotr
 '''
+from ObjectPose import ObjectPose
 
 class SceneDescription(object):
     '''
@@ -17,7 +18,7 @@ class SceneDescription(object):
         '''
         Constructor
         @param camera: camera location in the scene passed as @see: ObjectPose
-        @param anchor: o
+        @param anchor: anchor location in the scene passed as @see: ObjectPose
         '''
         self.camera = camera
         self.anchor = anchor
