@@ -6,6 +6,7 @@ Created on 06-05-2011
 import unittest
 from mockito import *
 
+
 class ArgumentParser(object):
     '''
     Class that specifies how the runner should be worked with. During initializations
@@ -30,12 +31,17 @@ class ArgumentParser(object):
         pass
 
     def readConfigFile(self):
-        self.configReader.readFile(self.configFile)
-        pass
+        '''
+            Gets the @see: GeneratorDescription from the configuration file.
+        '''
+        return self.configReader.readFile(self.configFile)
 
     def readX3DFile(self):
-        self.x3dReader.readFile(self.x3dFile)
-        pass
+        '''
+            Gets the @see: SceneDescription about the saved scene.
+            @return: the scene with only anchor and camera filled
+        '''
+        return self.x3dReader.readFile(self.x3dFile)
 
 #===============================================================================
 # UnitTests

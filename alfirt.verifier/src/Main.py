@@ -1,8 +1,8 @@
 '''
 Created on 04-04-2011
-Main entry point for ALFIRT Verifier project.
-Uses the native Python 2.7 x64 enviorment. Loads the data from 
-two files, watches how the metrics are between them
+Main entry point for ALFIRT Verifier project. Loads the data from  
+two files, watches how the metrics are between them. Generates the 
+output file with description about differences.
  
 
 @author: Piotr Jessa
@@ -14,7 +14,7 @@ if __name__ == '__main__':
     if len(sys.argv) < 3:
         print "Usage message should be printed here"
         sys.exit(1)
-        
+
     #TODO write reading line from system argv, and invoking good classes for that
-    
+
     pass

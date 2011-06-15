@@ -26,6 +26,7 @@ class PolarSystem(object):
         
         @attention: Assumes that the center of the polar system vector [0,0,0]
         '''
+        return
         pass
 
     @classmethod
@@ -39,7 +40,6 @@ class PolarSystem(object):
         @attention: Assumes that the center of the polar system vector [0,0,0]
         
         '''
-
         pass
 
 #===============================================================================
@@ -58,9 +58,9 @@ class PolarSystemUnitTests(unittest.TestCase):
 
     def runToPolar(self, x, y, z, expectedAlfa, expectedBeta, expectedRadius):
         result = PolarSystem.toPolar(x, y, z)
-        self.assertEqual(result.alfa, expectedAlfa, "The alfa should be 0")
-        self.assertEqual(result.beta, expectedBeta, "The alfa should be 0")
-        self.assertEqual(result.radius, expectedRadius, "The alfa should be 0")
+        self.assertEqual(result.alfa, expectedAlfa)
+        self.assertEqual(result.beta, expectedBeta)
+        self.assertEqual(result.radius, expectedRadius)
 
     def test_toPolar_case_1(self):
         '''
