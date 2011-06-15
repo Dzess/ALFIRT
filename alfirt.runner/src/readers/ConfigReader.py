@@ -60,6 +60,22 @@ class ConfigReader(object):
 
         return GeneratorInterval(int(x), int(y), int(z))
 
+
+    def __getInputFileName(self, sections):
+        if not 'File' in sections:
+            # No section files: use all default values
+            return GeneratorDescription.defaultInputFileName
+
+        # Get the value from this section
+        sectionMap = self.__getSectionMap('File')
+        try:
+            inputFileName = sectionMap['inputfilename']
+        except:
+            inputFileName = GeneratorDescription.defaultInputFileName
+
+        return inputFileName
+
+
     def readFile(self, file):
         '''
         Reads file and crates and sets the values.
@@ -90,8 +106,8 @@ class ConfigReader(object):
         radius = self.__getInterval(polarString, 'radiusstart', 'radiusstop', 'radiusstep')
 
         # Get the file name 
-        # TODO: get the reading of this section of the configuration file
-        inputFileName = GeneratorDescription.defaultInputFileName
+        inputFileName = self.__getInputFileName(sections)
+        # TODO: change the way it is done here
         inputFormat = GeneratorDescription.defaultInputFormat
         outputFormat = GeneratorDescription.defaultOutputFormat
 
