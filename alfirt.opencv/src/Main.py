@@ -30,7 +30,7 @@ class NaiveRecognition(object):
         cv.NamedWindow(window_name, cv.CV_WINDOW_AUTOSIZE)
         image = cv.LoadImage(self.imagePath, cv.CV_LOAD_IMAGE_COLOR) #Load the image
         cv.ShowImage(window_name, image) #Show the image
-        cv.waitKey()
+        cv.WaitKey()
         
     def printGoodFeatures(self):
         img = cv.LoadImageM(self.imagePath, cv.CV_LOAD_IMAGE_GRAYSCALE)
@@ -45,7 +45,7 @@ class NaiveRecognition(object):
         window_name = self.type
         cv.NamedWindow(window_name, cv.CV_WINDOW_AUTOSIZE)                   
         cv.ShowImage(window_name, imgColour) #Show the image
-        cv.waitKey()        
+        cv.WaitKey()        
         
 
 if __name__ == '__main__':
