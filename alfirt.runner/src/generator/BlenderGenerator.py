@@ -3,7 +3,6 @@ Created on 10-05-2011
 
 @author: Piotr
 '''
-import unittest
 
 class BlenderGenerator(object):
     '''
@@ -48,28 +47,4 @@ class BlenderGenerator(object):
         enviormental settings such as cameras, light sources.
         '''
         pass
-
-
-#===========================================================================
-#  UnitTests
-#===========================================================================
-class BlenderGeneratorUnitTests(unittest.TestCase):
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-    def test_no_file_with_render_basis(self):
-
-        pass
-
-    # TODO: add tests for blender script generator
-
-#===============================================================================
-#  Tests runner
-#===============================================================================
-if (__name__ == 'main'):
-    unittest.main(verbosity=2)
 

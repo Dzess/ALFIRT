@@ -3,7 +3,6 @@ Created on 12-05-2011
 
 @author: Piotr
 '''
-from ObjectPose import ObjectPose
 
 class SceneDescription(object):
     '''

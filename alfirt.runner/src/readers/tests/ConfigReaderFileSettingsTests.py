@@ -7,7 +7,7 @@ import unittest
 import os
 
 from readers.ConfigReader import ConfigReader
-from generator.GeneratorDescription import GeneratorDescription
+from generator.data.GeneratorDescription import GeneratorDescription
 
 
 class ConfigReaderFileSettingsTests(unittest.TestCase):
@@ -59,8 +59,6 @@ class ConfigReaderFileSettingsTests(unittest.TestCase):
         self.assertEqual(GeneratorDescription.defaultOutputFormat, settings.outputFormat,
                           "The default output format should be .bmp")
 
-        pass
-
     def test_passing_good_values_results_in_proper_generator_configuration_settings(self):
 
 
@@ -87,9 +85,6 @@ class ConfigReaderFileSettingsTests(unittest.TestCase):
         # Assertions go here
         self.assertEqual("myFileName", settings.inputFileName,
                          "The input file name should be 'myFileName'")
-
-
-        pass
 
 if __name__ == '__main__':
     unittest.main()

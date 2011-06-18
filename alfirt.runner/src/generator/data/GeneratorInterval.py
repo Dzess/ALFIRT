@@ -3,6 +3,7 @@ Created on 02-06-2011
 
 @author: Piotr
 '''
+
 class GeneratorInterval(object):
     '''
     Describes the interval in for generating the image.

@@ -15,7 +15,6 @@ class ConfiReaderPolarCoordinatesTests(unittest.TestCase):
     '''
 
 
-
     def __saveToFile(self, fileName, dataINIFormat):
         with open(fileName, 'w') as fileStream:
             fileStream.write(dataINIFormat)
@@ -56,14 +55,12 @@ Route: 66
 
         self.fileNameWithSteps = "file_with_steps"
         self.__saveToFile(self.fileNameWithSteps, dataINIFormatStepped)
-        pass
 
 
     def tearDown(self):
         # Removing file after test
         os.remove(self.fileName)
         os.remove(self.fileNameWithSteps)
-        pass
 
 
     def test_passing_good_values_results_in_data_creaton_default_step(self):
@@ -89,8 +86,6 @@ Route: 66
         self.assertEqual(ConfigReader.defaulBetaStep, results.beta.step, "The beta step should be default")
         self.assertEqual(ConfigReader.defaultRadiusStep, results.radius.step, "The radius step should be default")
 
-        pass
-
 
     def test_passing_good_values_results_in_data_creation_with_steps(self):
         '''
@@ -113,8 +108,6 @@ Route: 66
         self.assertEqual(results.radius.stop, 10, "Radius stop should be 10")
         self.assertEqual(results.radius.step, 3, "Radius step should be 3")
 
-        pass
-
     def test_reading_empty_file_results_in_exception(self):
         '''
         Checks if the empty or None conformity file is acceptable 
@@ -125,7 +118,6 @@ Route: 66
 
         with self.assertRaises(ValueError):
             configReader.readFile("non_existing_file")
-        pass
 
 #===========================================================================
 #  Test runner

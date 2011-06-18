@@ -9,7 +9,6 @@ command line. Takes command line arguments.
 from ArgumentParser import ArgumentParser
 import sys
 from generator.BlenderGenerator import BlenderGenerator
-from generator.SceneDescription import SceneDescription
 
 if __name__ == '__main__':
 
@@ -35,5 +34,3 @@ if __name__ == '__main__':
     # Mark finishing of the runner
 
     print "Finishing work with ALFIRT project. Bye."
-
-    pass

@@ -37,12 +37,10 @@ xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd 
         with open(self.fileName, 'w') as fileStream:
             fileStream.write(x3dString)
             fileStream.close()
-        pass
 
     def tearDown(self):
         # Removing file after test
         os.remove(self.fileName)
-        pass
 
     def test_reading_none_results_in_exception(self):
 
@@ -52,7 +50,6 @@ xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd 
 
         with self.assertRaises(ValueError):
             x3dReader.readFile("some no existing file")
-        pass
 
     def test_reading_file_with_no_anchor_results_in_exception(self):
         '''
@@ -114,8 +111,6 @@ xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd 
 
         self.assertEqual(translateCamera, [0.0, 0.0, -10.0], "The position of the camera should be 0 0 -10")
         self.assertEqual(rotateCamera, [0.0, 1.0, 0.0], "The rotation of the camera should be 0 1 0 3.14")
-
-        pass
 
 #===============================================================================
 #  Test runner

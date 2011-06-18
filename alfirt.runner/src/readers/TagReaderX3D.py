@@ -8,8 +8,8 @@ import os
 from xml.dom import minidom
 import xpath
 
-from generator.SceneDescription import SceneDescription
-from generator.ObjectPose import ObjectPose
+from generator.data.SceneDescription import SceneDescription
+from generator.data.ObjectPose import ObjectPose
 
 
 
@@ -96,21 +96,21 @@ class TagReaderX3D(object):
         return ObjectPose(translate, rotate)
 
 
-    def readFile(self, file):
+    def readFile(self, fileName):
         '''
-        Reads file in .x3d format and returns the data from ALFRT tags.
-        @param file: the path to the .x3d file tagged with ALFIRT attributes. 
+        Reads fileName in .x3d format and returns the data from ALFRT tags.
+        @param fileName: the path to the .x3d fileName tagged with ALFIRT attributes. 
         @return: the @see: SceneDescription object with anchor. Camera object is optional.
         
         '''
-        if (file == None) :
-            raise ValueError("The file attribute is mandatory")
+        if (fileName == None) :
+            raise ValueError("The fileName attribute is mandatory")
 
-        if not os.path.exists(file):
-            raise ValueError("The file provided does not exists")
+        if not os.path.exists(fileName):
+            raise ValueError("The fileName provided does not exists")
 
-        # using XML broad available library read file
-        xmldoc = minidom.parse(file)
+        # using XML broad available library read fileName
+        xmldoc = minidom.parse(fileName)
 
         # Get the anchor element
         anchor = self.__getAnchorElement(xmldoc)

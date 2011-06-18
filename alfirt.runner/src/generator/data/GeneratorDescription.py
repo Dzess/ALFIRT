@@ -30,5 +30,3 @@ class GeneratorDescription(object):
         self.inputFormat = inputFormat
         self.outputFormat = outputFormat
 
-        pass
-

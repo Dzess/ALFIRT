@@ -5,13 +5,14 @@ Created on 10-05-2011
 '''
 import os
 from ConfigParser import ConfigParser
-from generator.GeneratorDescription import GeneratorDescription
-from generator.GeneratorInterval import GeneratorInterval
+from generator.data.GeneratorDescription import GeneratorDescription
+from generator.data.GeneratorInterval import GeneratorInterval
 
 
 class ConfigReader(object):
     '''
-    Configuration reader for the INI file, reading polar coordinates for image generation. 
+        Configuration reader for the INI file, reading polar coordinates for image generation, file settings
+        additional information for camera object acquisition.
     '''
     defaultAlfaStep = 10
     defaulBetaStep = 10
@@ -76,28 +77,28 @@ class ConfigReader(object):
         return inputFileName
 
 
-    def readFile(self, file):
+    def readFile(self, fileName):
         '''
-        Reads file and crates and sets the values.
-        @param file: path to the file which has to be loaded with the configuration 
+            Reads fileName and crates and sets the values.
+        @param fileName: path to the fileName which has to be loaded with the configuration 
         '''
-        if(file == None):
-            raise ValueError("The None is not acceptable value for file parameter")
+        if(fileName == None):
+            raise ValueError("The None is not acceptable value for fileName parameter")
 
-        # Try finding this file
-        if not os.path.exists(file):
-            raise ValueError("The provided file does not exists")
+        # Try finding this fileName
+        if not os.path.exists(fileName):
+            raise ValueError("The provided fileName does not exists")
 
-        # Use configuration reader to find this file\
+        # Use configuration reader to find this fileName\
         self.parser = ConfigParser()
-        self.parser.read(file)
+        self.parser.read(fileName)
 
         sections = self.parser.sections()
 
         # Check for section about polar coordinates
         polarString = 'PolarCoordinates'
         if not polarString in sections:
-            raise ValueError("No mandatory polar section in config file")
+            raise ValueError("No mandatory polar section in config fileName")
 
 
         # Get alfa, beta and radius
@@ -105,7 +106,7 @@ class ConfigReader(object):
         beta = self.__getInterval(polarString, 'betastart', 'betastop', 'betastep')
         radius = self.__getInterval(polarString, 'radiusstart', 'radiusstop', 'radiusstep')
 
-        # Get the file name 
+        # Get the fileName name 
         inputFileName = self.__getInputFileName(sections)
         # TODO: change the way it is done here
         inputFormat = GeneratorDescription.defaultInputFormat
