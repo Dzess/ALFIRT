@@ -53,14 +53,6 @@ class TagReaderX3D(object):
 
         return ObjectPose(translate, rotate)
 
-    def __traverseDomTree(self, node, xmldoc, attribute):
-        for subelement in xmldoc.getElementsByTagName(node):
-            print help(subelement)
-            if subelement.hasAttribute(attribute):
-                return subelement
-            else:
-                return self.__traverseDomTree(subelement, xmldoc, attribute)
-        return None
 
     def __getAnchorElement(self, xmldoc):
 

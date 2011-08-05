@@ -28,7 +28,6 @@ class ArgumentParser(object):
 
         self.configFile = arguments[0]
         self.x3dFile = arguments[1]
-        pass
 
     def readConfigFile(self):
         '''
@@ -52,7 +51,6 @@ class ArgumentParserUnitTests(unittest.TestCase):
         self.fileTwo = "x3d_file_name"
         self.configReader = mock()
         self.x3dReader = mock()
-        pass
 
     def tearDown(self):
         pass
@@ -61,17 +59,14 @@ class ArgumentParserUnitTests(unittest.TestCase):
         parser = ArgumentParser([self.fileOne, self.fileTwo], self.configReader, self.x3dReader)
         parser.readConfigFile()
         verify(self.configReader).readFile(self.fileOne)
-        pass
 
     def test_reading_x3d_file(self):
         parser = ArgumentParser([self.fileOne, self.fileTwo], self.configReader, self.x3dReader)
         parser.readX3DFile()
         verify(self.x3dReader).readFile(self.fileTwo)
-        pass
 
     def test_passing_correct_values(self):
         ArgumentParser([self.fileOne, self.fileTwo], self.configReader, self.x3dReader)
-        pass
 
     def test_passing_inncorrect_number_of_values_rises_message(self):
         arguments = []
@@ -82,10 +77,3 @@ class ArgumentParserUnitTests(unittest.TestCase):
         arguments = None
         with self.assertRaises(ValueError):
             ArgumentParser(arguments, self.configReader, self.x3dReader)
-
-
-#===============================================================================
-# Runner for unittest
-#===============================================================================
-if (__name__ == 'main'):
-    unittest.main(verbosity=2)

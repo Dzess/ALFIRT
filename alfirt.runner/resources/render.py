@@ -6,13 +6,15 @@
 	@contact: dzesse@gmail.com
 	@version: 0.1
 """
-try:
-	import bpy
-	from bpy import context
-	from bpy import ops
-	from io_scene_x3d import import_x3d
-except ImportError:
-	print ("Importing blender libraries failed")
+
+def importing_libs():
+	try:
+		import bpy
+		from bpy import context
+		from bpy import ops
+		from io_scene_x3d import import_x3d
+	except ImportError:
+		print ("Importing blender libraries failed")
 
 
 def main():
@@ -59,6 +61,10 @@ def main():
 
 
 if __name__ == 'main':
+	# try getting libraries imported if not possible then raise an  exception
+	importing_libs()
+
+	# go with the render script
 	print ("ALFIRT: start of rendering")
 	main()
 	print ("ALFIRT: end of rendering")
