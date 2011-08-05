@@ -4,7 +4,8 @@ Created on 05-05-2011
 @author: Ankhazam
 '''
 
-import cv
+import cv2
+import numpy as np
 from optparse import OptionParser
 import sys
 import ImageDescription
@@ -27,25 +28,23 @@ class NaiveRecognition(object):
                 
     def showImage(self):
         window_name = self.type
-        cv.NamedWindow(window_name, cv.CV_WINDOW_AUTOSIZE)
-        image = cv.LoadImage(self.imagePath, cv.CV_LOAD_IMAGE_COLOR) #Load the image
-        cv.ShowImage(window_name, image) #Show the image
-        cv.waitKey()
+        cv2.namedWindow(window_name, cv2.CV_WINDOW_AUTOSIZE)
+        image = cv2.imread(self.imagePath)
+        cv2.imshow(window_name, image) #Show the image
+        cv2.waitKey()
         
     def printGoodFeatures(self):
-        img = cv.LoadImageM(self.imagePath, cv.CV_LOAD_IMAGE_GRAYSCALE)
-        imgColour = cv.LoadImageM(self.imagePath)
-        eig_image = cv.CreateMat(img.rows, img.cols, cv.CV_32FC1)
-        temp_image = cv.CreateMat(img.rows, img.cols, cv.CV_32FC1)
+        img = cv2.imread(self.imagePath, cv2.CV_LOAD_IMAGE_GRAYSCALE);
+        imgColour = cv2.imread(self.imagePath)
+        for (x,y) in np.float32((cv2.goodFeaturesToTrack(img, 100, 0.04, 1)).reshape(-1,2)):
+            cv2.circle(imgColour, (x,y), 3, (0,0,255,0),2)
+            print "good feature at", x,y
         
-        for (x, y) in cv.GoodFeaturesToTrack(img, eig_image, temp_image, 100, 0.04, 1.0, useHarris=True):
-            cv.Circle(imgColour, (int(x), int(y)), 3, cv.Scalar(0, 0, 255, 0), thickness=2, lineType=8, shift=0)
-            print "good feature at", x, y 
-           
         window_name = self.type
-        cv.NamedWindow(window_name, cv.CV_WINDOW_AUTOSIZE)                   
-        cv.ShowImage(window_name, imgColour) #Show the image
-        cv.waitKey()        
+        cv2.namedWindow(window_name, cv2.CV_WINDOW_AUTOSIZE)
+        cv2.imshow(window_name, imgColour)                  
+        cv2.waitKey()  
+
         
 
 if __name__ == '__main__':
