@@ -7,12 +7,13 @@ Created on 11-05-2011
 class GeneratorDescription(object):
     '''
     Describes the generator settings. Uses back end for polar - Cartesian system.
+    @attention: DTO
     '''
     defaultInputFileName = "input"
     defaultInputFormat = ".x3d"
     defaultOutputFormat = ".bmp"
 
-    def __init__(self, alfa, beta, radius, inputFileName, inputFormat, outputFormat):
+    def __init__(self, alfa=None, beta=None, radius=None, inputFileName=defaultInputFileName, inputFormat=defaultInputFormat, outputFormat=defaultOutputFormat):
         '''
         Constructor.
         @param alfa: alfa parameter of the generator 

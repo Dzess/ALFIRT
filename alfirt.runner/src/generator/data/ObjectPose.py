@@ -21,10 +21,15 @@ class ObjectPose(object):
         self.rotate = rotate
 
     def __str__(self):
-        '''
-        To String method. Prints all the values from rotation and translation
-        '''
         string = "Translation: " + self.translate + '\n'
         string += "Rotation: " + self.rotate + '\n'
         return string
 
+    def __eq__(self, o):
+        if isinstance(o, ObjectPose):
+            return self.translate == o.translate and self.rotate == o.rotate
+
+        return False
+
+    def __ne__(self, o):
+        return not self == o

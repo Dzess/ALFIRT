@@ -49,7 +49,7 @@ class ConfigReaderFileSettingsTests(unittest.TestCase):
         fileName = self.__saveToFile(configString)
 
         reader = ConfigReader()
-        settings = reader.readFile(fileName)
+        settings = reader.readScene(fileName)
 
         # Assertions go here
         self.assertEqual(GeneratorDescription.defaultInputFileName, settings.inputFileName,
@@ -80,7 +80,7 @@ class ConfigReaderFileSettingsTests(unittest.TestCase):
         fileName = self.__saveToFile(configString)
 
         reader = ConfigReader()
-        settings = reader.readFile(fileName)
+        settings = reader.readScene(fileName)
 
         # Assertions go here
         self.assertEqual("myFileName", settings.inputFileName,

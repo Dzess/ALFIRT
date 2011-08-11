@@ -33,14 +33,14 @@ class ArgumentParser(object):
         '''
             Gets the @see: GeneratorDescription from the configuration file.
         '''
-        return self.configReader.readFile(self.configFile)
+        return self.configReader.readScene(self.configFile)
 
     def readX3DFile(self):
         '''
             Gets the @see: SceneDescription about the saved scene.
             @return: the scene with only anchor and camera filled
         '''
-        return self.x3dReader.readFile(self.x3dFile)
+        return self.x3dReader.readScene(self.x3dFile)
 
 #===============================================================================
 # UnitTests
@@ -58,12 +58,12 @@ class ArgumentParserUnitTests(unittest.TestCase):
     def test_reading_config_file(self):
         parser = ArgumentParser([self.fileOne, self.fileTwo], self.configReader, self.x3dReader)
         parser.readConfigFile()
-        verify(self.configReader).readFile(self.fileOne)
+        verify(self.configReader).readScene(self.fileOne)
 
     def test_reading_x3d_file(self):
         parser = ArgumentParser([self.fileOne, self.fileTwo], self.configReader, self.x3dReader)
         parser.readX3DFile()
-        verify(self.x3dReader).readFile(self.fileTwo)
+        verify(self.x3dReader).readScene(self.fileTwo)
 
     def test_passing_correct_values(self):
         ArgumentParser([self.fileOne, self.fileTwo], self.configReader, self.x3dReader)

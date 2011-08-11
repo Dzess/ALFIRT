@@ -21,3 +21,17 @@ class SceneDescription(object):
         '''
         self.camera = camera
         self.anchor = anchor
+
+    def __eq__(self, o):
+        if isinstance(o, SceneDescription):
+            return o.camera == self.camera and o.anchor == self.anchor
+
+        return False
+
+    def __ne__(self, o):
+        return not self == o
+
+    def __str__(self, *args, **kwargs):
+        s = "Camera:" + str(self.camera) + "\n"
+        s += "Anchor:" + str(self.anchor) + "\n"
+        return s

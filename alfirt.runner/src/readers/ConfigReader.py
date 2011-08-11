@@ -77,10 +77,11 @@ class ConfigReader(object):
         return inputFileName
 
 
-    def readFile(self, fileName):
+    def readScene(self, fileName):
         '''
             Reads fileName and crates and sets the values.
         @param fileName: path to the fileName which has to be loaded with the configuration 
+        @return: GeneratorDescription of the provided file
         '''
         if(fileName == None):
             raise ValueError("The None is not acceptable value for fileName parameter")

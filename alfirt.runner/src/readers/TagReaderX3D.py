@@ -88,7 +88,7 @@ class TagReaderX3D(object):
         return ObjectPose(translate, rotate)
 
 
-    def readFile(self, fileName):
+    def readScene(self, fileName):
         '''
         Reads fileName in .x3d format and returns the data from ALFRT tags.
         @param fileName: the path to the .x3d fileName tagged with ALFIRT attributes. 

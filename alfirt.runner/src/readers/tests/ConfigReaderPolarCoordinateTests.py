@@ -69,7 +69,7 @@ Route: 66
         '''
         # test reading
         configReader = ConfigReader()
-        results = configReader.readFile(self.fileName)
+        results = configReader.readScene(self.fileName)
 
         # assert that what was read from file
         self.assertEqual(results.alfa.start, 20, "Alfa start should be 20")
@@ -93,7 +93,7 @@ Route: 66
         '''
         # test reading
         configReader = ConfigReader()
-        results = configReader.readFile(self.fileNameWithSteps)
+        results = configReader.readScene(self.fileNameWithSteps)
 
         # assert
         self.assertEqual(results.alfa.start, 20, "Alfa start should be 20")
@@ -114,10 +114,10 @@ Route: 66
         '''
         configReader = ConfigReader()
         with self.assertRaises(ValueError):
-            configReader.readFile(None)
+            configReader.readScene(None)
 
         with self.assertRaises(ValueError):
-            configReader.readFile("non_existing_file")
+            configReader.readScene("non_existing_file")
 
 #===========================================================================
 #  Test runner

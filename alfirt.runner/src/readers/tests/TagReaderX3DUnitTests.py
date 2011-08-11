@@ -46,10 +46,10 @@ xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd 
 
         x3dReader = TagReaderX3D()
         with self.assertRaises(ValueError):
-            x3dReader.readFile(None)
+            x3dReader.readScene(None)
 
         with self.assertRaises(ValueError):
-            x3dReader.readFile("some no existing file")
+            x3dReader.readScene("some no existing file")
 
     def test_reading_file_with_no_anchor_results_in_exception(self):
         '''
@@ -83,7 +83,7 @@ xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd 
         # Get reader
         x3dReader = TagReaderX3D()
         try:
-            x3dReader.readFile(fileName)
+            x3dReader.readScene(fileName)
         except ValueError:
             return
         finally:
@@ -97,7 +97,7 @@ xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd 
             Checks if the elements passed in X3D string are correct.
         '''
         x3dReader = TagReaderX3D()
-        results = x3dReader.readFile(self.fileName)
+        results = x3dReader.readScene(self.fileName)
 
         # assert the values
         translateCamera = results.camera.translate
