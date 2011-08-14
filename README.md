@@ -15,8 +15,8 @@ This software is under heavy development and it __is not encouraged__ to use it 
 #### Requirements
 
 * Python 2.7
-* OpenCV 2.2 
-* Blender 2.57b
+* OpenCV 2.3 
+* Blender 2.57b or above
 
 #### Usage
 Please read the presentation about the main concept behind this set of tools.
