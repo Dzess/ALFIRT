@@ -84,7 +84,7 @@ xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd 
         x3dReader = TagReaderX3D()
         try:
             x3dReader.readScene(fileName)
-        except ValueError:
+        except RuntimeError:
             return
         finally:
             os.remove(fileName)

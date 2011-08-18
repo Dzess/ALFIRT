@@ -21,11 +21,11 @@ class BlenderGeneratorTests(unittest.TestCase):
 
         self.expecetdFileString = s.replace(' ', '')
 
-
     def tearDown(self):
         pass
 
 
+    @unittest.skip("Not yet finished")
     def test_single_file_generation(self):
         '''
             Assumes that the Generator Descriptor is already created, then tests

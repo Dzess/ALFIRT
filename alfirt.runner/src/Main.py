@@ -12,7 +12,7 @@ from generator.BlenderGenerator import BlenderGenerator
 
 if __name__ == '__main__':
 
-    print "Welcome to ALFIRT project v.0.1 alfa"
+    print("Welcome to ALFIRT project v.0.1 alfa")
 
     # Get the command line options
     parser = ArgumentParser(sys.argv)
@@ -33,4 +33,4 @@ if __name__ == '__main__':
 
     # Mark finishing of the runner
 
-    print "Finishing work with ALFIRT project. Bye."
+    print("Finishing work with ALFIRT project. Bye.")

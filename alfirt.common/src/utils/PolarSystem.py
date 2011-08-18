@@ -8,7 +8,7 @@ import unittest
 
 class PolarSystem(object):
     '''
-    Transforms from 3D polar system to karthesian one.
+    Transforms from 3D polar system to Cartesian one.
     '''
 
     def __init__(self):
@@ -42,61 +42,4 @@ class PolarSystem(object):
         '''
         pass
 
-#===============================================================================
-#  UnitTests
-#===============================================================================
-class PolarSystemUnitTests(unittest.TestCase):
-
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-
-
-    def runToPolar(self, x, y, z, expectedAlfa, expectedBeta, expectedRadius):
-        result = PolarSystem.toPolar(x, y, z)
-        self.assertEqual(result.alfa, expectedAlfa)
-        self.assertEqual(result.beta, expectedBeta)
-        self.assertEqual(result.radius, expectedRadius)
-
-    def test_toPolar_case_1(self):
-        '''
-        Transforms [0,0,0] vector into polar space
-        '''
-        x = 0
-        y = 0
-        z = 0
-
-        expectedAlfa = 0
-        expectedBeta = 0
-        expectedRadius = 0
-
-        self.runToPolar(x, y, z, expectedAlfa, expectedBeta, expectedRadius)
-        pass
-
-    def test_toPolar_case_2(self):
-        '''
-        Transforms vector [1,2,3] into the proper value which is:
-        
-        '''
-        x = 1
-        y = 2
-        z = 3
-
-        # TODO: add support for that definitions
-        expectedAlfa = 0
-        expectedBeta = 0
-        expectedRadius = 0
-
-        self.runToPolar(x, y, z, expectedAlfa, expectedBeta, expectedRadius)
-        pass
-
-#===============================================================================
-#  Test runner
-#===============================================================================
-if (__name__ == 'main'):
-    unittest.main(verbosity=2)
 

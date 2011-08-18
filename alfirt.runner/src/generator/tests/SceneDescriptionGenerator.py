@@ -7,29 +7,32 @@ import unittest
 from generator.data.GeneratorDescription import GeneratorDescription
 from generator.data.GeneratorInterval import GeneratorInterval
 from generator.data.SceneDescription import SceneDescription
-from generator.SceneGenerator import SceneGenerator
+from generator.scene.SingleAxisSceneGenerator import SingleAxisSceneGenerator
+from generator.data.ObjectPose import ObjectPose
 
 
-class Test(unittest.TestCase):
-
+class SingleAxisSceneGeneratorTests(unittest.TestCase):
+    '''
+        Unit Tests for class @see: SingleAxisSceneGenerator
+    '''
 
     def setUp(self):
         self.gDesc = GeneratorDescription()
-
+        self.initCamera = ObjectPose([1, 0, 1], [0, 0, 0])
 
     def tearDown(self):
         pass
 
 
 
-    def setGeneratorDescription(self, int1, int2):
+    def __setGeneratorDescription(self, int1, int2):
         self.gDesc.alfa = int2
         self.gDesc.beta = int1
         self.gDesc.radius = int1
 
     def test_single_description_generation(self):
         '''
-            Checks if the SceneGenerator creates valid camera and anchor setting basing on 
+            Checks if the SingleAxisSceneGenerator creates valid camera and anchor setting basing on 
             the passed GeneratorDescription
         '''
 
@@ -40,9 +43,9 @@ class Test(unittest.TestCase):
         expectedScene = SceneDescription(None, None)
 
         # initialization of the gDesc 
-        self.setGeneratorDescription(interval, interval)
+        self.__setGeneratorDescription(interval, interval)
 
-        gen = SceneGenerator(self.gDesc)
+        gen = SingleAxisSceneGenerator(self.gDesc, self.initCamera)
         scenes = gen.prepareScenes()
 
         self.assertEquals(type(scenes) , type([]), "The returned elements should be list")
@@ -57,14 +60,28 @@ class Test(unittest.TestCase):
         interval2 = GeneratorInterval(start=2, stop=2)
 
         # pass to the generator
-        self.setGeneratorDescription(interval2, interval1)
+        self.__setGeneratorDescription(interval2, interval1)
 
-        gen = SceneGenerator(self.gDesc)
+        gen = SingleAxisSceneGenerator(self.gDesc, self.initCamera)
         scenes = gen.prepareScenes()
 
         self.assertEqual(type(scenes), type([]), "The returned element should be list")
         self.assertEqual(len(scenes), 2, "Two scenes should be returned")
 
+    def test_single_scene_genration_proper_values(self):
+        '''
+            Checks if the generated scene has the proper values basing on the
+            GeneratorDescriptor
+        '''
+        self.fail("Not yet implemented")
+
+    def test_single_scene_generation_proper_values_triangulation(self):
+        '''
+            Same as the test about checks the generated values for
+            the another set of data
+        '''
+        self.fail("Not yet implemented")
+        pass
 
 if __name__ == "__main__":
     unittest.main()

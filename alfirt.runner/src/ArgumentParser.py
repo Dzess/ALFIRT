@@ -49,8 +49,8 @@ class ArgumentParserUnitTests(unittest.TestCase):
     def setUp(self):
         self.fileOne = "config_file_name"
         self.fileTwo = "x3d_file_name"
-        self.configReader = mock()
-        self.x3dReader = mock()
+        self.configReader = Mock()
+        self.x3dReader = Mock()
 
     def tearDown(self):
         pass

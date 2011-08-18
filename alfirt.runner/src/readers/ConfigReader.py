@@ -4,7 +4,7 @@ Created on 10-05-2011
 @author: Piotr
 '''
 import os
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from generator.data.GeneratorDescription import GeneratorDescription
 from generator.data.GeneratorInterval import GeneratorInterval
 
