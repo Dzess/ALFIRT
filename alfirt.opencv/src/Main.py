@@ -8,14 +8,14 @@ import cv2
 import numpy as np
 from optparse import OptionParser
 import sys
-import ImageDescription
-import ImageDescriptionReader
+from image.ImageDescription import ImageDescription
+from image.ImageDescriptionReader import ImageDescriptionReader
 import unittest
 
 class NaiveRecognition(object):
     
-    def __init__(self, type, imagePath, refImage):
-        self.type = type
+    def __init__(self, runType, imagePath, refImage):
+        self.type = runType
         self.imagePath = imagePath
         if self.type == "learn":
             if refImage is ImageDescription:
@@ -29,23 +29,24 @@ class NaiveRecognition(object):
     def showImage(self):
         window_name = self.type
         cv2.namedWindow(window_name, cv2.CV_WINDOW_AUTOSIZE)
-        image = cv2.imread(self.imagePath)
+        image = cv2.imread(self.imagePath, cv2.CV_LOAD_IMAGE_GRAYSCALE)
+        image = cv2.Canny(image, 50, 100)
         cv2.imshow(window_name, image) #Show the image
         cv2.waitKey()
         
     def printGoodFeatures(self):
-        img = cv2.imread(self.imagePath, cv2.CV_LOAD_IMAGE_GRAYSCALE);
+        img = cv2.imread(self.imagePath, cv2.CV_LOAD_IMAGE_GRAYSCALE)
         imgColour = cv2.imread(self.imagePath)
-        for (x,y) in np.float32((cv2.goodFeaturesToTrack(img, 100, 0.04, 1)).reshape(-1,2)):
-            cv2.circle(imgColour, (x,y), 3, (0,0,255,0),2)
-            print "good feature at", x,y
+        for (x, y) in np.float32((cv2.goodFeaturesToTrack(img, 100, 0.04, 1)).reshape(-1, 2)):
+            cv2.circle(imgColour, (x, y), 3, (0, 0, 255, 0), 2)
+            print "good feature at", x, y
         
         window_name = self.type
         cv2.namedWindow(window_name, cv2.CV_WINDOW_AUTOSIZE)
         cv2.imshow(window_name, imgColour)                  
         cv2.waitKey()  
 
-        
+
 
 if __name__ == '__main__':
     print "OpenCV Learning Application"
@@ -73,8 +74,8 @@ if __name__ == '__main__':
         print "Learning mode"
         recognition = NaiveRecognition(options.runType, args[0], args[1])
         
-    # recognition.showImage()
-    recognition.printGoodFeatures()
+    recognition.showImage()
+    #recognition.printGoodFeatures()
        
     
 
