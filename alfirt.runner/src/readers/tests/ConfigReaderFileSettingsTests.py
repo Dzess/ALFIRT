@@ -52,9 +52,9 @@ class ConfigReaderFileSettingsTests(unittest.TestCase):
         settings = reader.readScene(fileName)
 
         # Assertions go here
-        self.assertEqual(GeneratorDescription.defaultInputFileName, settings.inputFileName,
+        self.assertEqual(GeneratorDescription.defaultInputFileName, settings._inputFileName,
                          "The input file name should be default value")
-        self.assertEqual(GeneratorDescription.defaultInputFormat, settings.inputFormat,
+        self.assertEqual(GeneratorDescription.defaultInputFormat, settings._inputFormat,
                          "The default input format should be .x3d")
         self.assertEqual(GeneratorDescription.defaultOutputFormat, settings.outputFormat,
                           "The default output format should be .bmp")
@@ -83,7 +83,7 @@ class ConfigReaderFileSettingsTests(unittest.TestCase):
         settings = reader.readScene(fileName)
 
         # Assertions go here
-        self.assertEqual("myFileName", settings.inputFileName,
+        self.assertEqual("myFileName", settings._inputFileName,
                          "The input file name should be 'myFileName'")
 
 if __name__ == '__main__':
