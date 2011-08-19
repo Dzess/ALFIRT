@@ -24,10 +24,41 @@ class GeneratorDescription(object):
         @param inputFormat: the format from which the image will be generated
         @param outputFormat: the format in which the image will be generated
         '''
+
         self.alfa = alfa
         self.beta = beta
         self.radius = radius
-        self.inputFileName = inputFileName
-        self.inputFormat = inputFormat
-        self.outputFormat = outputFormat
 
+        self._inputFileName = inputFileName
+        self._inputFormat = inputFormat
+        self._outputFormat = outputFormat
+
+    @property
+    def inputFileName(self):
+        return self._inputFileName
+
+    @inputFileName.setter
+    def inputFileName(self, value):
+        self._inputFileName = value
+
+    @property
+    def inputFormat(self):
+        return self._inputFormat
+
+    @inputFormat.setter
+    def inputFormat(self, value):
+        self._inputFormat = value
+
+    @property
+    def outputFormat(self):
+        return self._outputFormat
+
+    @outputFormat.setter
+    def outputFormat(self, value):
+        self._outputFormat = value
+
+    def __str__(self):
+        s = "Input File Name: " + self.inputFileName() + "\n"
+        s += "Input File Format: " + self.inputFormat() + "\n"
+        s += "Format File Format: " + self.outputFormat() + "\n"
+        return s

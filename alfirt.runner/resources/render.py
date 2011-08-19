@@ -1,27 +1,29 @@
-"""
+'''
 	In blender script for importing the X3D scene description and simple rendering it.
 	Requires Python 3.x
 	Tested with Blender 2.57b
 	@author Piotr Jessa
 	@contact: dzesse@gmail.com
 	@version: 0.1
-"""
+'''
 
-def importing_libs():
-	try:
-		import bpy
-		from bpy import context
-		from bpy import ops
-		from io_scene_x3d import import_x3d
-	except ImportError:
-		print ("Importing blender libraries failed")
+try:
+	import bpy
+	from bpy import context
+	from bpy import ops
+	from io_scene_x3d import import_x3d
+except ImportError:
+	print ("Importing blender libraries failed")
 
 
 def main():
+    '''
+        Main code that render the file
+    '''
 
 	#Parameters of the image
 	# TODO: this image parameters must from code generated
-	formatInput = ".x3d"
+    formatInput = ".x3d"
 	formatOutput = ".bmp"
 	name = "violin"
 	input = "models/"
@@ -59,10 +61,7 @@ def main():
 	img.save_render(filepath=fileNameOutput)
 
 
-
 if __name__ == 'main':
-	# try getting libraries imported if not possible then raise an  exception
-	importing_libs()
 
 	# go with the render script
 	print ("ALFIRT: start of rendering")
