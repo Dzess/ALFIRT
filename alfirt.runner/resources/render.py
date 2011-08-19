@@ -23,8 +23,8 @@ def main():
 
 	#Parameters of the image
 	# TODO: this image parameters must from code generated
-    formatInput = ".x3d"
-	formatOutput = ".bmp"
+    formatInput = "INPUT_FORMAT"
+	formatOutput = "OUTPUT_FORMAT"
 	name = "violin"
 	input = "models/"
 	output = "renders/"
