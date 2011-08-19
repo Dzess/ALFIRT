@@ -11,41 +11,76 @@ import sys
 from image.ImageDescription import ImageDescription
 from image.ImageDescriptionReader import ImageDescriptionReader
 import unittest
+from copy import deepcopy
 
 class NaiveRecognition(object):
     
+    
     def __init__(self, runType, imagePath, refImage):
-        self.type = runType
-        self.imagePath = imagePath
-        if self.type == "learn":
+        
+        self.runType = runType
+        
+        if self.runType == "learn":
             if refImage is ImageDescription:
                 self.refImage = refImage
             else:
                 with open(refImage, 'r') as refFile:
                     reader = ImageDescriptionReader()
                     self.refImage = reader.read(refFile)
+                    
+        self.loadImage(imagePath)
             
+    def loadImage(self, newImagePath):
+        self.image = cv2.imread(newImagePath)
+        self.imagePath = newImagePath
+        return self.image
                 
-    def showImage(self):
-        window_name = self.type
-        cv2.namedWindow(window_name, cv2.CV_WINDOW_AUTOSIZE)
-        image = cv2.imread(self.imagePath, cv2.CV_LOAD_IMAGE_GRAYSCALE)
-        image = cv2.Canny(image, 50, 100)
-        cv2.imshow(window_name, image) #Show the image
-        cv2.waitKey()
+    def showNewImageWindow(self, image, windowName):
+        cv2.namedWindow(windowName, cv2.CV_WINDOW_AUTOSIZE)
+        cv2.imshow(windowName, image) #Show the image
+
         
-    def printGoodFeatures(self):
-        img = cv2.imread(self.imagePath, cv2.CV_LOAD_IMAGE_GRAYSCALE)
-        imgColour = cv2.imread(self.imagePath)
+    def printGoodFeatures(self, image=None):
+        if image is None:
+            image = self.image
+
+        img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        imgColour = image.copy()
         for (x, y) in np.float32((cv2.goodFeaturesToTrack(img, 100, 0.04, 1)).reshape(-1, 2)):
             cv2.circle(imgColour, (x, y), 3, (0, 0, 255, 0), 2)
             print "good feature at", x, y
         
-        window_name = self.type
-        cv2.namedWindow(window_name, cv2.CV_WINDOW_AUTOSIZE)
-        cv2.imshow(window_name, imgColour)                  
-        cv2.waitKey()  
+        self.showNewImageWindow(imgColour, "Good features")
+        return imgColour
+        
+    def cannyTheImage(self, image=None):
+        if image is None:
+            image = self.image
+            
+        if  cv2.cv.fromarray(image).type != cv2.CV_8UC1:
+            img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        else:
+            img = image.copy()
+        img = cv2.Canny(img, 50, 200)
+        self.showNewImageWindow(img, "canny")
+        return img
+        
+    def findObjects(self, image=None):
+        if image is None:
+            image = self.image
 
+        if  cv2.cv.fromarray(image).type != cv2.CV_8UC1:
+            img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        else:
+            img = image.copy()
+        img = cv2.GaussianBlur(img, (5, 5), 0)
+        (contours, _) = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        img = image.copy()
+        
+        for contour in contours:
+            cv2.drawContours(image, contour, -1, (0, 0, 255))
+
+        self.showNewImageWindow(image, "findObjects")
 
 
 if __name__ == '__main__':
@@ -74,8 +109,11 @@ if __name__ == '__main__':
         print "Learning mode"
         recognition = NaiveRecognition(options.runType, args[0], args[1])
         
-    recognition.showImage()
-    #recognition.printGoodFeatures()
+    recognition.printGoodFeatures()
+    
+    recognition.findObjects(recognition.cannyTheImage())
+    while cv2.waitKey() is not 27:
+        pass
        
     
 
