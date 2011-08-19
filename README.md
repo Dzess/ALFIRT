@@ -20,14 +20,13 @@ This software is under heavy development and it __is not encouraged__ to use it 
 * OpenCV 2.3 
 * Blender 2.57b or above
 
-#### Python Package Requirements
 
-__Python 2.7__
+#### Python 2.7
 
 * Opencv 2.3 Python bindings (cv2)
 * NumPy 1.6.0
 
-__Python 3.2__
+#### Python 3.2
 
 * mathutils
 * lxml
