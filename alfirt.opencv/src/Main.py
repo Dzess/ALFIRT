@@ -46,9 +46,10 @@ class NaiveRecognition(object):
 
         img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         imgColour = image.copy()
-        for (x, y) in np.float32((cv2.goodFeaturesToTrack(img, 100, 0.04, 1)).reshape(-1, 2)):
-            cv2.circle(imgColour, (x, y), 3, (0, 0, 255, 0), 2)
-            print "good feature at", x, y
+        corners = cv2.goodFeaturesToTrack(img, 100, 0.04, 1)
+        for (x, y) in np.float32(corners.reshape(-1, 2)):
+            cv2.circle(imgColour, (x, y), 3, (0, 0, 255, 0), 1)
+            #print "good feature at", x, y
         
         self.showNewImageWindow(imgColour, "Good features")
         return imgColour
@@ -73,14 +74,24 @@ class NaiveRecognition(object):
             img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         else:
             img = image.copy()
-        img = cv2.GaussianBlur(img, (5, 5), 0)
+
+        (_, img) = cv2.threshold(img, cv2.mean(img)[0], 255, cv2.THRESH_BINARY)
+        self.showNewImageWindow(img, "thresholded")
+        
         (contours, _) = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         img = image.copy()
         
         for contour in contours:
+            #print contour-
             cv2.drawContours(image, contour, -1, (0, 0, 255))
+            rect = cv2.boundingRect(contour)
+            
 
+
+        
         self.showNewImageWindow(image, "findObjects")
+        
+        return contours
 
 
 if __name__ == '__main__':
@@ -109,9 +120,9 @@ if __name__ == '__main__':
         print "Learning mode"
         recognition = NaiveRecognition(options.runType, args[0], args[1])
         
-    recognition.printGoodFeatures()
     
-    recognition.findObjects(recognition.cannyTheImage())
+    print recognition.findObjects()
+    print recognition.printGoodFeatures()
     while cv2.waitKey() is not 27:
         pass
        
