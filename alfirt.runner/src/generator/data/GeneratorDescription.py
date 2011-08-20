@@ -13,6 +13,9 @@ class GeneratorDescription(object):
     defaultInputFormat = ".x3d"
     defaultOutputFormat = ".bmp"
 
+    defaultInputFolder = "models"
+    defaultOutputFolder = "renders"
+
     def __init__(self, alfa=None, beta=None, radius=None, inputFileName=defaultInputFileName, inputFormat=defaultInputFormat, outputFormat=defaultOutputFormat):
         '''
         Constructor.
@@ -32,6 +35,25 @@ class GeneratorDescription(object):
         self._inputFileName = inputFileName
         self._inputFormat = inputFormat
         self._outputFormat = outputFormat
+
+        self._inputFolder = GeneratorDescription.defaultInputFolder
+        self._outputFolder = GeneratorDescription.defaultOutputFolder
+
+    @property
+    def outputFolder(self):
+        return self._outputFolder
+
+    @outputFolder.setter
+    def outputFolder(self, value):
+        self._outputFolder = value
+
+    @property
+    def inputFolder(self):
+        return self._inputFolder
+
+    @inputFolder.setter
+    def inputFolder(self, value):
+        self._inputFolder = value;
 
     @property
     def inputFileName(self):
@@ -61,4 +83,7 @@ class GeneratorDescription(object):
         s = "Input File Name: " + self.inputFileName() + "\n"
         s += "Input File Format: " + self.inputFormat() + "\n"
         s += "Format File Format: " + self.outputFormat() + "\n"
+
+        s += "Input Folders :" + self.inputFolder() + "\n"
+        s += "Output Folders : " + self.outputFolder() + "\n"
         return s

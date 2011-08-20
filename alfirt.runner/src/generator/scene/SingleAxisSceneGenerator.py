@@ -8,7 +8,15 @@ from generator.data.ObjectPose import ObjectPose
 from mathutils import Vector
 import math
 
-class SingleAxisSceneGenerator(object):
+class SceneGeneratorBase(object):
+    '''
+        Base abstract class for generating scenes
+    '''
+    def prepareScenes(self):
+        raise NotImplementedError("This is abstract method")
+
+
+class SingleAxisSceneGenerator(SceneGeneratorBase):
     '''
     Generates @see: SceneDescription object from the @see: GeneratorDescription object.
     Uses only the alfa OR beta angels for generation, thus camera moves in the 
@@ -34,7 +42,6 @@ class SingleAxisSceneGenerator(object):
 
     def __getCount(self, interval):
         return ((interval.stop - interval.start) / interval.step) if interval.step != 0 else 0
-
 
     def prepareScenes(self):
         '''

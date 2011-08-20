@@ -5,7 +5,16 @@ Created on 10-05-2011
 '''
 import os
 
-class BlenderGenerator(object):
+class RenderGeneratorBase(object):
+    '''
+        Abstract base class for generating the 
+    file for rendering.
+    '''
+
+    def prepareRender(self, fileName):
+        raise NotImplementedError("This is abstract method")
+
+class BlenderGenerator(RenderGeneratorBase):
     '''
     Generates the .py file for rendering complaint with blender 2.57.
     '''
@@ -66,6 +75,9 @@ class BlenderGenerator(object):
         self.__putToken('INPUT_FORMAT', self.generatorDescription.inputFormat)
         self.__putToken('OUTPUT_FORMAT', self.generatorDescription.outputFormat)
 
+        self.__putToken("INPUT_FOLDER", self.generatorDescription.inputFolder)
+        self.__putToken("OUTPUT_FOLDER", self.generatorDescription.outputFolder)
+
     def __replaceTokens(self, line):
         '''
             Searches line for token, and replaces it
@@ -79,18 +91,18 @@ class BlenderGenerator(object):
     def __putToken(self, key, value):
         self._tokens[key] = value
 
-    def prepareRender(self, sceneDescription):
+    def prepareRender(self, fileName):
         '''
             Prepares the render script for generating.
-        @param sceneDescription: description of the scene, mostly involving 
-                                 environmental settings such as cameras, light sources.
+        @param fileName: the new name of the file that will be included in
+                         in string
         @return: the string with the blender python script for provided elements.
         '''
 
         blender_script = open(self._renderFileLocation, mode='r').readlines()
 
         # include scene description element injecting
-        # TODO: implement getting things from scene description
+        self.__putToken("FILE_NAME", fileName)
 
         output_lines = []
         for line in blender_script:

@@ -9,9 +9,11 @@
 
 try:
 	import bpy
+	import os
 	from bpy import context
 	from bpy import ops
 	from io_scene_x3d import import_x3d
+
 except ImportError:
 	print ("Importing blender libraries failed")
 
@@ -25,9 +27,9 @@ def main():
 	# TODO: this image parameters must from code generated
     formatInput = "INPUT_FORMAT"
 	formatOutput = "OUTPUT_FORMAT"
-	name = "violin"
-	input = "models/"
-	output = "renders/"
+	name = "FILE_NAME"
+	input = "INPUT_FOLDER"
+	output = "OUTPUT_FOLDER"
 
 	# Get the names right
 	fileNameInput = input + name + formatInput

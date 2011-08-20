@@ -3,12 +3,15 @@ Created on 04-05-2011
 
 @author: Piotr
 '''
-import unittest
 
 class ImageDescription(object):
     '''
     Class represents the image characteristics from the 
-    learning point of view. 
+    learning point of view.
+    
+    Consists of fields:
+    element name - name of the file which this descriptions
+    
     '''
 
     def __init__(self, name, x, y, z,
