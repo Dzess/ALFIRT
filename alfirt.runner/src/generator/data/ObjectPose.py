@@ -21,8 +21,8 @@ class ObjectPose(object):
         self.rotate = rotate
 
     def __str__(self):
-        string = "Translation: " + self.translate + '\n'
-        string += "Rotation: " + self.rotate + '\n'
+        string = "Translation: " + str(self.translate) + '\n'
+        string += "Rotation: " + str(self.rotate) + '\n'
         return string
 
     def __eq__(self, o):

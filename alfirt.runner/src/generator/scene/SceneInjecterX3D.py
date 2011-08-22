@@ -4,6 +4,8 @@ Created on Aug 20, 2011
 @author: Piotr
 '''
 from generator.data.SceneDescription import SceneDescription
+from readers.ParserX3D import ParserX3D
+from lxml import etree
 
 class SceneInjecterBase(object):
     """
@@ -14,11 +16,10 @@ class SceneInjecterBase(object):
         raise NotImplementedError("This is abstract method")
 
 
+
 class SceneInjecterX3D(SceneInjecterBase):
     '''
-    Writer class for .x3d files.
-    Allowing injecting various value into existing 
-    file. 
+    Allowing injecting various value into existing string with XML. 
     '''
 
 
@@ -26,6 +27,10 @@ class SceneInjecterX3D(SceneInjecterBase):
         '''
         Constructor
         '''
+        self.parser = ParserX3D()
+
+    def __getStringRepresentation(self, list):
+        return "0.0 0.0 0.0"
 
     def injectScene(self, data, scene):
         '''
@@ -40,4 +45,16 @@ class SceneInjecterX3D(SceneInjecterBase):
         if not isinstance(scene, SceneDescription):
             raise TypeError("Scene expected to be SceneDescription")
 
-        pass
+        data = data.encode('ascii', 'ignore')
+        tree = etree.fromstring(data)
+
+        (_, _, viewpoint) = self.parser.getViewpointAttributes(tree)
+        camera = scene.camera
+
+        # TODO: put math logic for axis angle transformation 
+        viewpoint.attrib['position'] = self.__getStringRepresentation(camera.translate)
+        viewpoint.attrib['orientation'] = self.__getStringRepresentation(camera.rotate) + " 0.0"
+
+        output = str(etree.tostring(tree, pretty_print=True))
+        output = output[2:]
+        return output
