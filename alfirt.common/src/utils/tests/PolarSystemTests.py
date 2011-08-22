@@ -21,9 +21,7 @@ class PolarSystemUnitTests(unittest.TestCase):
 
     def __runToPolar(self, x, y, z, expectedAlfa, expectedBeta, expectedRadius):
         result = PolarSystem.toPolar(x, y, z)
-        self.assertEqual(result.alfa, expectedAlfa)
-        self.assertEqual(result.beta, expectedBeta)
-        self.assertEqual(result.radius, expectedRadius)
+        self.assertEqual((expectedAlfa, expectedBeta, expectedRadius), result)
 
     def test_toPolar_case_1(self):
         '''
@@ -39,6 +37,7 @@ class PolarSystemUnitTests(unittest.TestCase):
 
         self.__runToPolar(x, y, z, expectedAlfa, expectedBeta, expectedRadius)
 
+    @unittest.skip("Not yet implemented")
     def test_toPolar_case_2(self):
         '''
         Transforms vector [1,2,3] into the proper value which is:

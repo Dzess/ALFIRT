@@ -5,8 +5,6 @@ Created on 04-05-2011
 '''
 
 
-from image.ImageDescription import ImageDescription
-
 class ImageDescriptionWriter(object):
     '''
     Writes the ImageDescription class to the file stream

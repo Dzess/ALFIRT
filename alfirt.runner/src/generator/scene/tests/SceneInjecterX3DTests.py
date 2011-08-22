@@ -12,6 +12,8 @@ class TagWriterX3DTests(unittest.TestCase):
 
 
     def setUp(self):
+        self.injecter = SceneInjecterX3D()
+
         # Setting up the X3D string with ALFIRT namespace tags
         x3dString = """<?xml version="1.0" encoding="UTF-8"?>
                         <!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.2//EN" "http://www.web3d.org/specifications/x3d-3.2.dtd">
@@ -31,12 +33,11 @@ class TagWriterX3DTests(unittest.TestCase):
         """
         self.x3dString = x3dString.replace(" ", "")
 
-        camera = ObjectPose([11, 12, 13], [14, 15, 16])
+        camera = ObjectPose([0, 0, 0], [0, 0, 0])
         anchor = ObjectPose([1, 2, 3], [4, 5, 6])
 
         self.scene = SceneDescription(camera, anchor)
 
-        # TODO: include the expected version
         expected_x3dString = """<?xml version="1.0" encoding="UTF-8"?>
                         <!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.2//EN" "http://www.web3d.org/specifications/x3d-3.2.dtd">
                         <X3D profile="Interchange" version="3.2" 
@@ -44,8 +45,8 @@ class TagWriterX3DTests(unittest.TestCase):
                                  xmlns:alfirt="ALFIRT" 
                                  xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd ">
                             <Scene>
-                              <Viewpoint description='Rear View' orientation='0 1 0 3.14159' position='0 0 -10'/> 
-                              <Shape alfirt:anchor_translate="0 1 2" alfirt:anchor_rotate="0.4 0.2 0.3">
+                              <Viewpoint description='Rear View' orientation='0.0 0.0 0.0 0.0' position='0 0 0'/> 
+                              <Shape alfirt:anchor_translate="1 2 3" alfirt:anchor_rotate="4 5 6">
                                 <IndexedFaceSet coordIndex="0 1 2">
                                   <Coordinate point="0 0 0 1 0 0 0.5 1 0"/>
                                 </IndexedFaceSet>
@@ -55,16 +56,22 @@ class TagWriterX3DTests(unittest.TestCase):
         """
         self.expected_x3dString = expected_x3dString.replace(" ", "")
 
-    def tearDown(self):
-        pass
 
+    def test_writing_proper_values(self):
 
-    def testWritingValues(self):
-        writer = SceneInjecterX3D()
-        resutl = writer.injectScene(data=self.x3dString, scene=self.scene)
+        resutl = self.injecter.injectScene(data=self.x3dString, scene=self.scene)
 
         self.assertEqual(resutl, self.expected_x3dString, "The values were not injected")
 
+    def test_writing_nones_values(self):
+
+        with self.assertRaises(TypeError):
+            self.injecter.injectScene(None, None)
+
+    def test_writing_wrong_values(self):
+
+        with self.assertRaises(TypeError):
+            self.injecter.injectScene(3, "scene")
 
 if __name__ == "__main__":
     unittest.main()

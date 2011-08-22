@@ -12,9 +12,7 @@ import sys
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
-        print "Usage message should be printed here"
+        print("Usage message should be printed here")
         sys.exit(1)
 
     #TODO write reading line from system argv, and invoking good classes for that
-
-    pass

@@ -68,6 +68,7 @@ class SingleAxisSceneGeneratorTests(unittest.TestCase):
         self.assertEqual(type(scenes), type([]), "The returned element should be list")
         self.assertEqual(len(scenes), 2, "Two scenes should be returned")
 
+    @unittest.skip("Not yet implemented")
     def test_single_scene_genration_proper_values(self):
         '''
             Checks if the generated scene has the proper values basing on the
@@ -75,6 +76,7 @@ class SingleAxisSceneGeneratorTests(unittest.TestCase):
         '''
         self.fail("Not yet implemented")
 
+    @unittest.skip("Not yet implemented")
     def test_single_scene_generation_proper_values_triangulation(self):
         '''
             Same as the test about checks the generated values for

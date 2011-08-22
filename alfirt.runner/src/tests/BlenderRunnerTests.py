@@ -13,17 +13,10 @@ from generator.BlenderGenerator import BlenderGenerator
 class BlenderRunnerTests(unittest.TestCase):
 
 
-    def setUp(self):
-        pass
-
-
-    def tearDown(self):
-        pass
-
-
     def test_running_blender(self):
         '''
-            Test if the blender script is invoked correctly
+            Test if the blender script is invoked correctly with 
+            corresponding runner.
         '''
         gDesc = GeneratorDescription()
         bGen = BlenderGenerator(gDesc)

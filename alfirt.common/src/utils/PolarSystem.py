@@ -3,8 +3,6 @@ Created on 12-05-2011
 
 @author: Piotr
 '''
-import unittest
-
 
 class PolarSystem(object):
     '''
@@ -26,8 +24,7 @@ class PolarSystem(object):
         
         @attention: Assumes that the center of the polar system vector [0,0,0]
         '''
-        return
-        pass
+        return (0, 0, 0)
 
     @classmethod
     def fromPolar(cls, alfa, beta, radius):
@@ -40,6 +37,4 @@ class PolarSystem(object):
         @attention: Assumes that the center of the polar system vector [0,0,0]
         
         '''
-        pass
-
-
+        return (0, 0, 0)
