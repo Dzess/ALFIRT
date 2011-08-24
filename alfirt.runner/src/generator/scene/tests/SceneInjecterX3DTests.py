@@ -8,6 +8,7 @@ from generator.scene.SceneInjecterX3D import SceneInjecterX3D
 from generator.data.SceneDescription import SceneDescription
 from generator.data.ObjectPose import ObjectPose
 from lxml import etree
+from lxml import objectify
 
 class TagWriterX3DTests(unittest.TestCase):
 
@@ -60,12 +61,16 @@ class TagWriterX3DTests(unittest.TestCase):
 
         result = self.injecter.injectScene(data=self.x3dString, scene=self.scene)
 
+        print(result)
+
         # get the whitespace trimmed
-        expected_tree = etree.fromstring(self.expected_x3dString.encode(encoding='ascii', errors='ignore'))
-        self.expected_x3dString = etree.tostring(expected_tree, pretty_print=True)
+        expected_tree = objectify.fromstring(self.expected_x3dString.encode(encoding='ascii', errors='ignore'))
+        result_tree = objectify.fromstring(result.encode(encoding='utf_8', errors='strict'))
 
+        expected_string = etree.tostring(expected_tree)
+        result_string = etree.tostring(result_tree)
 
-        self.assertEqual(result, self.expected_x3dString, "The values were not injected")
+        self.assertEqual(result_string, expected_string, "The values were not injected")
 
     def test_writing_nones_values(self):
 

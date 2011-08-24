@@ -6,6 +6,7 @@ Created on Aug 20, 2011
 from generator.data.SceneDescription import SceneDescription
 from readers.ParserX3D import ParserX3D
 from lxml import etree
+import string
 
 class SceneInjecterBase(object):
     """
@@ -56,5 +57,8 @@ class SceneInjecterX3D(SceneInjecterBase):
         viewpoint.attrib['orientation'] = self.__getStringRepresentation(camera.rotate) + " 0.0"
 
         output = str(etree.tostring(tree, pretty_print=True))
-        output = output[2:]
+        output = output[2:-1]
+        output = output.replace("\\n", " ")
+        output = output.replace(string.whitespace, " ")
+
         return output
