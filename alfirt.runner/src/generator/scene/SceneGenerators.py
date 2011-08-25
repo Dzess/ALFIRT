@@ -45,7 +45,7 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
 
     def prepareScenes(self):
         '''
-            Gets the list of @see: SceneDescription with the provieded scene
+            @see: SceneDescription with the provieded scene
         '''
         # TODO
         alfaCount = self.__getCount(self.generatorDesc.alfa)

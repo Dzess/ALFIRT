@@ -53,7 +53,8 @@ class GeneratorDescription(object):
 
     @inputFolder.setter
     def inputFolder(self, value):
-        self._inputFolder = value;
+        self._inputFolder = value
+        print(value)
 
     @property
     def inputFileName(self):
