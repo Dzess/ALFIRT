@@ -52,17 +52,17 @@ class BlenderGenerator(RenderGeneratorBase):
 
         if os.name == 'posix':
             alfirt_path = "/".join(sum_coll)
-            
+
         elif os.name == "nt" :
             alfirt_path = "\\".join(sum_coll)
         else:
             raise NotImplementedError("Implement other than posix standards")
-        
+
         alfirt_path = os.path.normpath(alfirt_path)
-        
+
         return alfirt_path
 
-    def __init__(self, generatorDescription):
+    def __init__(self, generatorDescription, inputFolder, outputFolder):
         '''
             Constructor. Assumes the file location in the resources file
         render.py
@@ -79,8 +79,8 @@ class BlenderGenerator(RenderGeneratorBase):
         self.__putToken('INPUT_FORMAT', self.generatorDescription.inputFormat)
         self.__putToken('OUTPUT_FORMAT', self.generatorDescription.outputFormat)
 
-        self.__putToken("INPUT_FOLDER", self.generatorDescription.inputFolder)
-        self.__putToken("OUTPUT_FOLDER", self.generatorDescription.outputFolder)
+        self.__putToken("INPUT_FOLDER", inputFolder)
+        self.__putToken("OUTPUT_FOLDER", outputFolder)
 
     def __replaceTokens(self, line):
         '''

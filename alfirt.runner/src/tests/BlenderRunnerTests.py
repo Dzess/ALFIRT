@@ -26,7 +26,7 @@ class BlenderRunnerTests(unittest.TestCase):
     def setUp(self):
         self.root = os.path.join("test")
         path = os.path.abspath(self.root)
-        
+
         if os.path.isdir(path):
             shutil.rmtree(path)
 
@@ -80,14 +80,15 @@ class BlenderRunnerTests(unittest.TestCase):
 
         when(gDesc).getInputFilePath().thenReturn(inputFileLocation)
 
-
-        bGen = BlenderGenerator(gDesc)
+        inputFolderPath = os.path.join(self.root, inputFolder)
+        outputFolderPath = os.path.join(self.root, outputFolder)
+        bGen = BlenderGenerator(gDesc, inputFolder=inputFolderPath, outputFolder=outputFolderPath)
 
         runner = BlenderRunner(gDesc, sGen, bGen, self.root)
 
         # act
         runner.execute()
-        
+
 
         verify(sGen, times=1, atleast=None, atmost=None, between=None)
 
@@ -95,15 +96,22 @@ class BlenderRunnerTests(unittest.TestCase):
 
         input_path = os.path.join(self.root, gDesc.inputFolder, expected_name + gDesc.inputFormat)
         output_path = os.path.join(self.root, gDesc.outputFolder, expected_name + gDesc.outputFormat)
+        script_path = os.path.join(self.root, "scripts", expected_name + ".py")
 
         print(os.path.abspath(input_path))
         print(os.path.abspath(output_path))
+        print(os.path.abspath(script_path))
 
         # assertion about creating file the file should be created in order for rendering
         self.assertTrue(os.path.exists(input_path), "Expected .x3d file could not be found: " + input_path)
 
+        # assertion about generated script
+        self.assertTrue(os.path.exists(script_path), "Expected to find .py rendering script" + script_path)
+
         # assertion about generated scene
         self.assertTrue(os.path.exists(output_path), "Expected created .bmp file, could not be found: " + output_path)
+
+
 
 if __name__ == "__main__":
     unittest.main()

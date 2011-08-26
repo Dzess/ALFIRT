@@ -14,7 +14,10 @@ class BlenderGeneratorTests(unittest.TestCase):
         gDesc = GeneratorDescription(inputFileName="token", inputFormat=".x3d", outputFormat=".jpg")
         fileName = "new_file_name"
 
-        bGen = BlenderGenerator(gDesc)
+        inputFolder = "in_folder_provided"
+        outputFolder = "out_folder_provided"
+
+        bGen = BlenderGenerator(gDesc, inputFolder, outputFolder)
         print(bGen.prepareRender(fileName))
 
 

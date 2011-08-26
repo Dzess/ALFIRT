@@ -127,7 +127,7 @@ class BlenderRunner(RunnerBase):
         render_script_file = os.path.abspath(render_script_file)
 
 
-        final_name = self.__getFormattedName(counter) + self.generatorDescription.inputFormat
+        final_name = self.__getFormattedName(counter)
 
         render_script = self.renderGenerator.prepareRender(final_name)
 
