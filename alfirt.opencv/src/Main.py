@@ -52,7 +52,7 @@ class NaiveRecognition(object):
             #print "good feature at", x, y
         
         self.showNewImageWindow(imgColour, "Good features")
-        return imgColour
+        return corners
         
     def cannyTheImage(self, image=None):
         if image is None:
