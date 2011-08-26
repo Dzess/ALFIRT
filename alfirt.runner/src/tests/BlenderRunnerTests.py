@@ -7,7 +7,6 @@ import unittest
 import os
 
 from BlenderRunner import BlenderRunner
-from mockito.mock import Mock
 from generator.BlenderGenerator import BlenderGenerator
 from mockito.mockito import when, verify
 from mockito import mock
@@ -25,7 +24,9 @@ class BlenderRunnerTests(unittest.TestCase):
     '''
 
     def setUp(self):
-        path = os.path.abspath("tmp")
+        self.root = os.path.join("test")
+        path = os.path.abspath(self.root)
+        
         if os.path.isdir(path):
             shutil.rmtree(path)
 
@@ -44,7 +45,7 @@ class BlenderRunnerTests(unittest.TestCase):
             corresponding runner. Generates SINGLE (one) file for the blender, and
             creates single scene.
         '''
-        sGen = Mock()
+        sGen = mock()
 
         # what kind of scenes are to be generated
         camera = ObjectPose([5, 0, 10], [0, 0, 0])
@@ -57,7 +58,7 @@ class BlenderRunnerTests(unittest.TestCase):
 
         #gDesc = self.__getGeneratorDescription()
 
-        inputFileLocation = "../../resources/models/cube_0.x3d"
+        inputFileLocation = os.path.join("resources", "models", "cube_0.x3d")
 
         # use mock for generator description instead of class
         name = "some_expected_name"
@@ -69,7 +70,7 @@ class BlenderRunnerTests(unittest.TestCase):
         outputFormat = ".bmp"
 
 
-        gDesc = Mock(GeneratorDescription, strict=True)
+        gDesc = mock(GeneratorDescription, strict=True)
         gDesc.inputFolder = inputFolder
         gDesc.outputFolder = outputFolder
         gDesc.inputFormat = inputFormat
@@ -82,17 +83,18 @@ class BlenderRunnerTests(unittest.TestCase):
 
         bGen = BlenderGenerator(gDesc)
 
-        runner = BlenderRunner(gDesc, sGen, bGen)
+        runner = BlenderRunner(gDesc, sGen, bGen, self.root)
 
         # act
-        output = runner.execute()
-        print(output.read())
+        runner.execute()
+        
 
         verify(sGen, times=1, atleast=None, atmost=None, between=None)
 
+        expected_name = name + "_0"
 
-        input_path = os.path.join(gDesc.inputFolder, name + gDesc.inputFormat)
-        output_path = os.path.join(gDesc.outputFolder, name + gDesc.outputFormat)
+        input_path = os.path.join(self.root, gDesc.inputFolder, expected_name + gDesc.inputFormat)
+        output_path = os.path.join(self.root, gDesc.outputFolder, expected_name + gDesc.outputFormat)
 
         print(os.path.abspath(input_path))
         print(os.path.abspath(output_path))

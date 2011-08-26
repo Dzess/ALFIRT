@@ -20,7 +20,7 @@ class BlenderRunner(RunnerBase):
         Class uses the injected scene generator and @see: GeneratorDescription objects
     '''
 
-    def __init__(self, generatorDescription, sceneGenerator, renderGenerator):
+    def __init__(self, generatorDescription, sceneGenerator, renderGenerator, rootFolder):
         '''
         Constructor
         @param generatorDescription: object of class @see: GeneratorDescription
@@ -35,7 +35,7 @@ class BlenderRunner(RunnerBase):
         self.sceneInjecter = SceneInjecterX3D()
 
         # TODO: passed via constructor
-        self.rootFolder = "tmp"
+        self.rootFolder = rootFolder
 
         self._base_command = "blender -b --python "
 
