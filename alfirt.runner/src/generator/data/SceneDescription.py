@@ -32,6 +32,7 @@ class SceneDescription(object):
         return not self == o
 
     def __str__(self, *args, **kwargs):
-        s = "Camera:" + str(self.camera) + "\n"
+        s = "Scene Object: \n"
+        s += "Camera:" + str(self.camera) + "\n"
         s += "Anchor:" + str(self.anchor) + "\n"
         return s

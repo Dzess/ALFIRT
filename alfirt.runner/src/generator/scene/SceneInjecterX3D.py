@@ -59,6 +59,7 @@ class SceneInjecterX3D(SceneInjecterBase):
         output = str(etree.tostring(tree, pretty_print=True))
         output = output[2:-1]
         output = output.replace("\\n", " ")
+        output = output.replace("\\t", " ")
         output = output.replace(string.whitespace, " ")
 
         return output

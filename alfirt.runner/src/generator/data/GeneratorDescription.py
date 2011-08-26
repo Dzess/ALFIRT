@@ -3,6 +3,8 @@ Created on 11-05-2011
 
 @author: Piotr
 '''
+from os.path import abspath
+from os.path import join
 
 class GeneratorDescription(object):
     '''
@@ -79,6 +81,13 @@ class GeneratorDescription(object):
     @outputFormat.setter
     def outputFormat(self, value):
         self._outputFormat = value
+
+
+    def getInputFilePath(self):
+        name = self._inputFileName + self._inputFormat
+        path = join(self._inputFolder, name)
+        path = abspath(path)
+        return path
 
     def __str__(self):
         s = "Input File Name: " + self.inputFileName() + "\n"

@@ -7,8 +7,8 @@ import unittest
 from generator.data.GeneratorDescription import GeneratorDescription
 from generator.data.GeneratorInterval import GeneratorInterval
 from generator.data.SceneDescription import SceneDescription
-from generator.scene.SingleAxisSceneGenerator import SingleAxisSceneGenerator
 from generator.data.ObjectPose import ObjectPose
+from generator.scene.SceneGenerators import SingleAxisSceneGenerator
 
 
 class SingleAxisSceneGeneratorTests(unittest.TestCase):

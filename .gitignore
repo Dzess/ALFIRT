@@ -5,8 +5,14 @@
 .settings/
 target/
 .class
+.directory
 *~
 renders/
 *.pyc
-
 documentation/presentation/img/
+alfirt.runner/src/tests/tmp/
+build
+
+alfirt.runner/bpy
+alfirt.runner/os
+

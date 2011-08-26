@@ -15,6 +15,7 @@ from generator.data.GeneratorDescription import GeneratorDescription
 from generator.data.GeneratorInterval import GeneratorInterval
 from generator.data.SceneDescription import SceneDescription
 from generator.data.ObjectPose import ObjectPose
+import shutil
 
 
 class BlenderRunnerTests(unittest.TestCase):
@@ -23,7 +24,10 @@ class BlenderRunnerTests(unittest.TestCase):
         the script working and having the file produced
     '''
 
-
+    def setUp(self):
+        path = os.path.abspath("tmp")
+        if os.path.isdir(path):
+            shutil.rmtree(path)
 
     def __getGeneratorDescription(self):
         # actually those values are not meant to be used
@@ -53,11 +57,13 @@ class BlenderRunnerTests(unittest.TestCase):
 
         #gDesc = self.__getGeneratorDescription()
 
+        inputFileLocation = "../../resources/models/cube_0.x3d"
+
         # use mock for generator description instead of class
         name = "some_expected_name"
 
-        inputFolder = "foo"
-        outputFolder = "bar"
+        inputFolder = "models"
+        outputFolder = "images"
 
         inputFormat = ".x3d"
         outputFormat = ".bmp"
@@ -71,12 +77,16 @@ class BlenderRunnerTests(unittest.TestCase):
 
         gDesc.inputFileName = name
 
+        when(gDesc).getInputFilePath().thenReturn(inputFileLocation)
+
+
         bGen = BlenderGenerator(gDesc)
 
         runner = BlenderRunner(gDesc, sGen, bGen)
 
         # act
-        runner.execute()
+        output = runner.execute()
+        print(output.read())
 
         verify(sGen, times=1, atleast=None, atmost=None, between=None)
 
