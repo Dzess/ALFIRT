@@ -52,10 +52,14 @@ class BlenderGenerator(RenderGeneratorBase):
 
         if os.name == 'posix':
             alfirt_path = "/".join(sum_coll)
-            alfirt_path = os.path.normpath(alfirt_path)
-        else :
+            
+        elif os.name == "nt" :
+            alfirt_path = "\\".join(sum_coll)
+        else:
             raise NotImplementedError("Implement other than posix standards")
-
+        
+        alfirt_path = os.path.normpath(alfirt_path)
+        
         return alfirt_path
 
     def __init__(self, generatorDescription):
