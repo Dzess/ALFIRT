@@ -5,7 +5,6 @@ Created on Aug 11, 2011
 '''
 from generator.data.SceneDescription import SceneDescription
 from generator.data.ObjectPose import ObjectPose
-from mathutils import Vector
 from math import cos, sin, sqrt, radians, floor
 
 class SceneGeneratorBase(object):

@@ -46,7 +46,7 @@ class TagWriterX3DTests(unittest.TestCase):
                                  xmlns:alfirt="ALFIRT" 
                                  xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd ">
                             <Scene>
-                              <Viewpoint description='Rear View' orientation='0.0 0.0 0.0 0.0' position='0.0 0.0 0.0'/> 
+                              <Viewpoint description='Rear View' orientation='1.0 0.0 0.0 0.0' position='0.0 0.0 0.0'/> 
                               <Shape alfirt:anchor_translate="0 1 2" alfirt:anchor_rotate="0.4 0.2 0.3">
                                 <IndexedFaceSet coordIndex="0 1 2">
                                   <Coordinate point="0 0 0 1 0 0 0.5 1 0"/>
@@ -69,6 +69,9 @@ class TagWriterX3DTests(unittest.TestCase):
 
         expected_string = etree.tostring(expected_tree)
         result_string = etree.tostring(result_tree)
+
+        print(expected_string)
+        print(result_string)
 
         self.assertEqual(result_string, expected_string, "The values were not injected")
 
