@@ -12,6 +12,7 @@ from image.ImageDescription import ImageDescription
 from image.ImageDescriptionReader import ImageDescriptionReader
 import unittest
 from copy import deepcopy
+from numpy.ma.core import cos, sin
 
 class NaiveRecognition(object):
     
@@ -47,6 +48,7 @@ class NaiveRecognition(object):
         img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         imgColour = image.copy()
         corners = cv2.goodFeaturesToTrack(img, 100, 0.04, 1)
+
         for (x, y) in np.float32(corners.reshape(-1, 2)):
             cv2.circle(imgColour, (x, y), 3, (0, 0, 255, 0), 1)
             #print "good feature at", x, y
@@ -65,6 +67,47 @@ class NaiveRecognition(object):
         img = cv2.Canny(img, 50, 200)
         self.showNewImageWindow(img, "canny")
         return img
+    
+    def findSURF(self, image=None):
+        if image is None:
+            image = self.image
+            
+        if  cv2.cv.fromarray(image).type != cv2.CV_8UC1:
+            img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        else:
+            img = image.copy()            
+        
+        surf = cv2.SURF(400)
+        keypoints = surf.detect(img, None)
+        
+        #drawing the keypoints
+        img = image.copy()
+        for key in keypoints :
+            self.drawKeypoint(img, key)
+        
+        
+        self.showNewImageWindow(img, "SURFED")
+        
+        return keypoints
+    
+        
+    def drawKeypoint(self, image, keypoint):
+        # fetch basic info
+        radius = int(keypoint.size / 2)
+        center = (int(keypoint.pt[0]), int(keypoint.pt[1]))
+        
+        color = (0, 0, 255)
+        # draw circle in center
+        cv2.circle(image, center, radius, color)
+        
+        # draw orientation
+        if keypoint.angle != -1 :
+            angleRad = keypoint.angle * cv2.cv.CV_PI / 180
+            destPoint = (int(cos(angleRad) * radius) + center[0], int(sin(angleRad) * radius) + center[1])
+            cv2.line(image, center, destPoint, color)
+        else:
+            cv2.circle(image, center, 1, color)
+        
         
     def findObjects(self, image=None):
         if image is None:
@@ -85,10 +128,8 @@ class NaiveRecognition(object):
             #print contour-
             cv2.drawContours(image, contour, -1, (0, 0, 255))
             rect = cv2.boundingRect(contour)
-            
-
-
         
+       
         self.showNewImageWindow(image, "findObjects")
         
         return contours
@@ -121,8 +162,9 @@ if __name__ == '__main__':
         recognition = NaiveRecognition(options.runType, args[0], args[1])
         
     
-    print recognition.findObjects()
-    print recognition.printGoodFeatures()
+    #print recognition.findObjects()
+    #print recognition.printGoodFeatures()
+    recognition.findSURF()
     while cv2.waitKey() is not 27:
         pass
        
