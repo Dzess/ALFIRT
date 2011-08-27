@@ -6,7 +6,7 @@ Created on Aug 11, 2011
 from generator.data.SceneDescription import SceneDescription
 from generator.data.ObjectPose import ObjectPose
 from mathutils import Vector
-import math
+from math import cos, sin, sqrt, radians, floor
 
 class SceneGeneratorBase(object):
     '''
@@ -22,7 +22,7 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
     Uses only the alfa OR beta angels for generation, thus camera moves in the 
     ONE surface !
     '''
-
+    roundPrecision = 15
 
     def __init__(self, generatorDesc, initCamera, initAnchor=None):
         '''
@@ -39,21 +39,47 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
         self.initCamera = initCamera
         self.initAnchor = initAnchor
 
+        # getting the radius thing
+        cameraX = float(self.initCamera.translate[0])
+        cameraY = float(self.initCamera.translate[1])
+        radiusXY = sqrt(cameraX * cameraX + cameraY * cameraY)
+        self.radius = radiusXY
+        print("Radius: " + str(self.radius))
 
     def __getCount(self, interval):
         return ((interval.stop - interval.start) / interval.step) if interval.step != 0 else 0
+
+
+    def __getScene(self, i, alfaValue):
+
+        # translation for circular movement
+        x = round(cos(radians(alfaValue)), SingleAxisSceneGenerator.roundPrecision) * self.radius
+        y = round(sin(radians(alfaValue)), SingleAxisSceneGenerator.roundPrecision) * self.radius
+
+        # rotation for circular movement
+        r = radians(90 + alfaValue)
+
+        # create the translation for the camera
+        translate = [x, y, self.initCamera.translate[2]]
+        rotate = [self.initCamera.rotate[0], self.initCamera.rotate[1], r]
+        camera = ObjectPose(translate=translate, rotate=rotate)
+        return SceneDescription(camera, self.initAnchor)
+
 
     def prepareScenes(self):
         '''
             @see: SceneDescription with the provieded scene
         '''
-        # TODO
+
         alfaCount = self.__getCount(self.generatorDesc.alfa)
-
+        alfaStep = self.generatorDesc.alfa.step
+        alfaStart = self.generatorDesc.alfa.start
         result = []
-        upTo = int(math.floor(alfaCount)) + 1
+        upTo = int(floor(alfaCount)) + 1
         for i in range(0, upTo):
-            result.append(SceneDescription(None, None))
+            alfaValue = i * alfaStep + alfaStart
+            print("Alfa:" + str(alfaValue))
+            scene = self.__getScene(i, alfaValue)
+            result.append(scene)
+
         return result
-
-

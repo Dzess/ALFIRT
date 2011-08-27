@@ -33,6 +33,6 @@ class SceneDescription(object):
 
     def __str__(self, *args, **kwargs):
         s = "Scene Object: \n"
-        s += "Camera:" + str(self.camera) + "\n"
-        s += "Anchor:" + str(self.anchor) + "\n"
+        s += "Camera:" + "\n" + str(self.camera) + "\n"
+        s += "Anchor:" + "\n" + str(self.anchor) + "\n"
         return s

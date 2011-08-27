@@ -15,7 +15,8 @@ class ObjectPose(object):
         '''
         Constructor
         @param translate: list with translation parameters in x,y,z coordinate system
-        @param rotate: list with rotation parameters in x,y,z coordinate system
+        @param rotate: list with rotation parameters in x,y,z coordinate system 
+        @attention: rotation elements MUST BE IN RADIANS
         '''
         self.translate = translate
         self.rotate = rotate
