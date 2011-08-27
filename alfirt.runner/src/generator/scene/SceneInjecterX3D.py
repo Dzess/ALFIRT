@@ -6,6 +6,8 @@ Created on Aug 20, 2011
 from generator.data.SceneDescription import SceneDescription
 from readers.ParserX3D import ParserX3D
 from lxml import etree
+from mathutils import Quaternion, Euler
+from math import sqrt, acos
 import string
 
 class SceneInjecterBase(object):
@@ -30,8 +32,34 @@ class SceneInjecterX3D(SceneInjecterBase):
         '''
         self.parser = ParserX3D()
 
-    def __getStringRepresentation(self, list):
-        return "0.0 0.0 0.0"
+    def __getStringRepresentation(self, elements):
+        string = ""
+        for element in elements:
+            string += str(float(element)) + " "
+        string = string[:-1]
+        return string
+
+    def __fromQuaternionToAxisAngle(self, q):
+        angle = 2 * acos(q.w)
+        x = q.x / sqrt(1 - q.w * q.w)
+        y = q.y / sqrt(1 - q.w * q.w)
+        z = q.z / sqrt(1 - q.w * q.w)
+        return ([x, y, z], angle)
+
+    def __getAxisAngleBasedRotation(self, rotate):
+        euler = Euler(rotate)
+        #print(euler)
+        quaternion = euler.to_quaternion()
+        #print(quaternion)
+        #print(quaternion.axis.to_tuple())
+        #print(quaternion.angle)
+
+        axises = quaternion.axis.to_tuple()
+        angle = quaternion.angle
+        output = self.__getStringRepresentation(axises) + " " + str(angle)
+        print(output)
+        return output
+
 
     def injectScene(self, data, scene):
         '''
@@ -52,9 +80,8 @@ class SceneInjecterX3D(SceneInjecterBase):
         (_, _, viewpoint) = self.parser.getViewpointAttributes(tree)
         camera = scene.camera
 
-        # TODO: put math logic for axis angle transformation 
         viewpoint.attrib['position'] = self.__getStringRepresentation(camera.translate)
-        viewpoint.attrib['orientation'] = self.__getStringRepresentation(camera.rotate) + " 0.0"
+        viewpoint.attrib['orientation'] = self.__getAxisAngleBasedRotation(camera.rotate)
 
         output = str(etree.tostring(tree, pretty_print=True))
         output = output[2:-1]
