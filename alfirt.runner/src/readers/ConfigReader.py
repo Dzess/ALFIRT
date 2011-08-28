@@ -4,6 +4,7 @@ Created on 10-05-2011
 @author: Piotr
 '''
 import os
+import logging
 from configparser import ConfigParser
 from generator.data.GeneratorDescription import GeneratorDescription
 from generator.data.GeneratorInterval import GeneratorInterval
@@ -18,12 +19,12 @@ class ConfigReader(object):
     defaulBetaStep = 10
     defaultRadiusStep = 10
 
+    logger = logging.getLogger()
+
     def __init__(self):
         '''
         Constructor.
         '''
-
-
 
     def __getSectionMap(self, section):
         '''
@@ -91,6 +92,8 @@ class ConfigReader(object):
             raise ValueError("The provided fileName does not exists")
 
         # Use configuration reader to find this fileName\
+        self.logger.info("Reading the configuration file: '" + fileName + "'")
+
         self.parser = ConfigParser()
         self.parser.read(fileName)
 
@@ -109,6 +112,7 @@ class ConfigReader(object):
 
         # Get the fileName name 
         inputFileName = self.__getInputFileName(sections)
+
         # TODO: change the way it is done here
         inputFormat = GeneratorDescription.defaultInputFormat
         outputFormat = GeneratorDescription.defaultOutputFormat

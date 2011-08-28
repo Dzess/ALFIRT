@@ -4,7 +4,7 @@ Created on 10-05-2011
 @author: Piotr
 '''
 import os
-
+import logging
 from lxml import etree
 
 from generator.data.SceneDescription import SceneDescription
@@ -35,6 +35,8 @@ class TagReaderX3D(object):
 
         if not os.path.exists(fileName):
             raise ValueError("The fileName provided does not exists")
+
+        logging.info("Reading the input model file: '" + fileName + "'")
 
         # using XML broad available library read fileName
         tree = etree.parse(fileName)

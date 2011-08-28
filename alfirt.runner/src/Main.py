@@ -6,31 +6,47 @@ command line. Takes command line arguments.
 
 @author: Piotr
 '''
-from ArgumentParser import ArgumentParser
+
 import sys
+import os
+import logging
 from generator.BlenderGenerator import BlenderGenerator
+from BlenderRunner import BlenderRunner
+from generator.scene.SceneGenerators import SingleAxisSceneGenerator
+from readers.ConfigReader import ConfigReader
+from readers.TagReaderX3D import TagReaderX3D
+from ArgumentParser import ArgumentParser
 
 if __name__ == '__main__':
 
-    print("Welcome to ALFIRT project v.0.1 alfa")
+    logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+    logger = logging.getLogger()
+    logger.setLevel(level=logging.DEBUG)
+
+    logger.info("Welcome to ALFIRT project v.0.1 alfa")
+
+    # TODO: make this code working with other file formats than x3d only
+    configReader = ConfigReader()
+    x3dReader = TagReaderX3D()
 
     # Get the command line options
-    parser = ArgumentParser(sys.argv)
+    parser = ArgumentParser(sys.argv, configReader=configReader, x3dReader=x3dReader)
 
     # Get overall configuration
-    configuration = parser.readConfigFile()
+    gd = parser.readConfigFile()
+    initScene = parser.readX3DFile()
 
-    # Get overall input scene for rendering
-    scene = parser.readX3DFile()
-
-    generator = BlenderGenerator()
-    # Basing on the configuration loop through the possible elements 
-    # and generate the images in provided files
-    # TODO: add this looping here
-
-    generator.prepareRender(scene)
+    rootFolder = "runner.output"
+    inputFolder = os.path.join(rootFolder, gd.inputFolder)
+    outputFolder = os.path.join(rootFolder, gd.outputFolder)
 
 
-    # Mark finishing of the runner
+    # Overall model mechanics for using the renderer
+    # TODO: make those elements plug via factories 
+    sg = SingleAxisSceneGenerator(gd, initCamera=initScene.camera, initAnchor=None)
+    rg = BlenderGenerator(gd, inputFolder=inputFolder, outputFolder=outputFolder)
 
-    print("Finishing work with ALFIRT project. Bye.")
+    # BlenderRunner
+    runner = BlenderRunner(gd=gd, sceneGenerator=sg, renderGenerator=rg, rootFolder=rootFolder)
+
+    logger.info("Finishing work with ALFIRT project.")

@@ -51,14 +51,23 @@ class ConfigReaderFileSettingsTests(unittest.TestCase):
         reader = ConfigReader()
         settings = reader.readScene(fileName)
 
-        # Assertions go here
-        self.assertEqual(GeneratorDescription.defaultInputFileName, settings._inputFileName,
+        # Assertions go here (testing properties not ._value)
+        self.assertEqual(GeneratorDescription.defaultInputFileName, settings.inputFileName,
                          "The input file name should be default value")
-        self.assertEqual(GeneratorDescription.defaultInputFormat, settings._inputFormat,
+        self.assertEqual(GeneratorDescription.defaultInputFormat, settings.inputFormat,
                          "The default input format should be .x3d")
         self.assertEqual(GeneratorDescription.defaultOutputFormat, settings.outputFormat,
                           "The default output format should be .bmp")
 
+        # Default values for output and input folder should be used
+
+        self.assertEqual(GeneratorDescription.defaultInputFolder, settings.inputFolder,
+                         "The default input folder should be models")
+        self.assertEqual(GeneratorDescription.defaultOutputFolder, settings.outputFolder,
+                         "The default output folder should be renders")
+
+    # TODO: unlock this test for M2
+    @unittest.skip("The functionality is not too be present yet")
     def test_passing_good_values_results_in_proper_generator_configuration_settings(self):
 
 
@@ -71,8 +80,6 @@ class ConfigReaderFileSettingsTests(unittest.TestCase):
         RadiusStop: 10
         [File]
         InputFileName : myFileName
-        InputFormat : .collada
-        OutputFormat: .jpg
         """
 
         configString = configString.replace(' ', '')
@@ -83,8 +90,12 @@ class ConfigReaderFileSettingsTests(unittest.TestCase):
         settings = reader.readScene(fileName)
 
         # Assertions go here
-        self.assertEqual("myFileName", settings._inputFileName,
+        self.assertEqual("myFileName", settings.inputFileName,
                          "The input file name should be 'myFileName'")
+        self.assertEqual(".x3d", settings.inputFormat,
+                         "The file format should be collada")
+        self.assertEqual(".bmp", settings.outputFormat,
+                         "The output file format shoudl be jpg")
 
 if __name__ == '__main__':
     unittest.main()
