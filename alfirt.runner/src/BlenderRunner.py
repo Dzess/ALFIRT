@@ -6,6 +6,8 @@ Created on Aug 20, 2011
 from generator.data.GeneratorDescription import GeneratorDescription
 
 import os
+import logging
+
 from generator.scene.SceneInjecterX3D import SceneInjecterX3D
 
 class RunnerBase(object):
@@ -19,8 +21,14 @@ class BlenderRunner(RunnerBase):
     '''
         Class uses the injected scene generator and @see: GeneratorDescription objects
     '''
+    logger = logging.getLogger()
 
-    def __init__(self, generatorDescription, sceneGenerator, renderGenerator, rootFolder):
+    def __init__(self,
+                 generatorDescription,
+                 sceneGenerator,
+                 renderGenerator,
+                 rootFolder,
+                 modelFileName=None):
         '''
         Constructor
         @param generatorDescription: object of class @see: GeneratorDescription
@@ -40,10 +48,11 @@ class BlenderRunner(RunnerBase):
         self._base_command = "blender -b --python "
 
         # read the file with data model (x3d) and make it DEFAULT !
-        model_data_file = self.generatorDescription.getInputFilePath()
-        with open(model_data_file, mode='r') as file :
+        #model_data_file = self.generatorDescription.getInputFilePath()
+        with open(modelFileName, mode='r') as file :
             self.render_text = " ".join(file.readlines())
 
+        self.logger.debug("Successfully loaded the model file with name: '" + modelFileName + "'")
 
     def __buildCommand(self, inputScript):
         '''
@@ -57,12 +66,13 @@ class BlenderRunner(RunnerBase):
             Creates new folder if there is no such foldeer 
             if there is then raises exception 
         '''
-        print("Making folder: " + folder)
         if not os.path.isdir(folder):
             os.mkdir(folder)
         else :
             path = os.path.abspath(folder)
             raise RuntimeError("The specified folder already exists: " + path)
+
+        self.logger.info("Creating folder: '" + folder + "'")
 
     def __createOutputFolders(self):
         '''
@@ -98,8 +108,7 @@ class BlenderRunner(RunnerBase):
         model_final = os.path.join(path, final_name)
         model_final = os.path.abspath(model_final)
 
-        print("Model final")
-        print(model_final)
+        self.logger.debug("Model final file: '" + model_final + "'")
 
         # use injector to put values into the file stream
         output = self.sceneInjecter.injectScene(self.render_text, scene)
@@ -126,13 +135,11 @@ class BlenderRunner(RunnerBase):
         render_script_file = os.path.join(path, render_script_file)
         render_script_file = os.path.abspath(render_script_file)
 
+        self.logger.debug("Render final file: '" + render_script_file + "'")
 
         final_name = self.__getFormattedName(counter)
 
         render_script = self.renderGenerator.prepareRender(final_name)
-
-        print("Render file")
-        print(render_script_file)
 
         # save the render script into proper folder
         with open(render_script_file, mode="w") as file:
@@ -152,6 +159,9 @@ class BlenderRunner(RunnerBase):
         scenes = self.sceneGenerator.prepareScenes()
         i = 0
         for scene in scenes:
+
+            self.logger.info("Generating scene %d ", i)
+
             model_file = self.__createModelFile(scene, i)
 
             render_file = self.__createRenderFile(i)
@@ -159,10 +169,10 @@ class BlenderRunner(RunnerBase):
             # get the rendering
             command = self.__buildCommand(render_file)
 
-            print(command)
+            self.logger.debug("Calling command: '" + command + "'")
 
-            #TODO: make it loggable
             stream = os.popen(command)
-            print(stream.read())
+
+            self.logger.debug("Blender output: '" + stream.read() + "'")
 
             i += 1

@@ -84,7 +84,11 @@ class BlenderRunnerTests(unittest.TestCase):
         outputFolderPath = os.path.join(self.root, outputFolder)
         bGen = BlenderGenerator(gDesc, inputFolder=inputFolderPath, outputFolder=outputFolderPath)
 
-        runner = BlenderRunner(gDesc, sGen, bGen, self.root)
+        runner = BlenderRunner(generatorDescription=gDesc,
+                               sceneGenerator=sGen,
+                               renderGenerator=bGen,
+                               rootFolder=self.root,
+                               modelFileName=inputFileLocation)
 
         # act
         runner.execute()

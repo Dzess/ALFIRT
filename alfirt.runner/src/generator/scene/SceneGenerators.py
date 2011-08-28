@@ -3,6 +3,8 @@ Created on Aug 11, 2011
 
 @author: Piotr
 '''
+import logging
+
 from generator.data.SceneDescription import SceneDescription
 from generator.data.ObjectPose import ObjectPose
 from math import cos, sin, sqrt, radians, floor
@@ -22,6 +24,7 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
     ONE surface !
     '''
     roundPrecision = 15
+    logger = logging.getLogger()
 
     def __init__(self, generatorDesc, initCamera, initAnchor=None):
         '''
@@ -43,7 +46,8 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
         cameraY = float(self.initCamera.translate[1])
         radiusXY = sqrt(cameraX * cameraX + cameraY * cameraY)
         self.radius = radiusXY
-        print("Radius: " + str(self.radius))
+
+        self.logger.info("Scene generator calculated radius: " + str(self.radius))
 
     def __getCount(self, interval):
         return ((interval.stop - interval.start) / interval.step) if interval.step != 0 else 0
@@ -75,9 +79,10 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
         alfaStart = self.generatorDesc.alfa.start
         result = []
         upTo = int(floor(alfaCount)) + 1
+        self.logger.info("Preparing %d number of scenes", upTo)
         for i in range(0, upTo):
             alfaValue = i * alfaStep + alfaStart
-            print("Alfa:" + str(alfaValue))
+            self.logger.info("Scene %d rotated with angle %s", i, str(alfaValue))
             scene = self.__getScene(i, alfaValue)
             result.append(scene)
 

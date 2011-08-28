@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
     logger = logging.getLogger()
-    logger.setLevel(level=logging.DEBUG)
+    logger.setLevel(level=logging.INFO)
 
     logger.info("Welcome to ALFIRT project v.0.1 alfa")
 
@@ -40,6 +40,8 @@ if __name__ == '__main__':
     inputFolder = os.path.join(rootFolder, gd.inputFolder)
     outputFolder = os.path.join(rootFolder, gd.outputFolder)
 
+    logger.info("Successfully loaded the configuration file and model file")
+
 
     # Overall model mechanics for using the renderer
     # TODO: make those elements plug via factories 
@@ -47,6 +49,13 @@ if __name__ == '__main__':
     rg = BlenderGenerator(gd, inputFolder=inputFolder, outputFolder=outputFolder)
 
     # BlenderRunner
-    runner = BlenderRunner(gd=gd, sceneGenerator=sg, renderGenerator=rg, rootFolder=rootFolder)
+    logger.info("Running generator")
+    runner = BlenderRunner(generatorDescription=gd,
+                           sceneGenerator=sg,
+                           renderGenerator=rg,
+                           rootFolder=rootFolder,
+                           modelFileName=parser.x3dFile)
+
+    runner.execute()
 
     logger.info("Finishing work with ALFIRT project.")

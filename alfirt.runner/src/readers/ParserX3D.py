@@ -4,6 +4,7 @@ Created on Aug 22, 2011
 @author: Piotr
 '''
 
+import logging
 from lxml import etree
 from generator.data.ObjectPose import ObjectPose
 
@@ -13,6 +14,7 @@ class ParserX3D(object):
 
     '''
     defaultNamespace = "ALFIRT"
+    logger = logging.getLogger()
 
     def __init__(self, namespace=defaultNamespace):
         '''
@@ -78,8 +80,8 @@ class ParserX3D(object):
 
         (position, orientation, _) = self.getViewpointAttributes(tree)
 
-        print(position)
-        print(orientation)
+        self.logger.debug("Camera position translate: '" + str(position) + "'")
+        self.logger.debug("Camera position rotation: '" + str(orientation) + "'")
 
         # Split string by ' ' and get the values
         orientations = orientation.split(' ')

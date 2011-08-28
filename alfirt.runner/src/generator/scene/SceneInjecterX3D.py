@@ -9,6 +9,7 @@ from lxml import etree
 from mathutils import Quaternion, Euler
 from math import sqrt, acos
 import string
+import logging
 
 class SceneInjecterBase(object):
     """
@@ -24,6 +25,7 @@ class SceneInjecterX3D(SceneInjecterBase):
     '''
     Allowing injecting various value into existing string with XML. 
     '''
+    logger = logging.getLogger()
 
 
     def __init__(self):
@@ -49,6 +51,9 @@ class SceneInjecterX3D(SceneInjecterBase):
     def __getAxisAngleBasedRotation(self, rotate):
         euler = Euler(rotate)
         #print(euler)
+
+        self.logger.info("Euler XYZ rotation %s", str(euler))
+
         quaternion = euler.to_quaternion()
         #print(quaternion)
         #print(quaternion.axis.to_tuple())
@@ -57,7 +62,6 @@ class SceneInjecterX3D(SceneInjecterBase):
         axises = quaternion.axis.to_tuple()
         angle = quaternion.angle
         output = self.__getStringRepresentation(axises) + " " + str(angle)
-        print(output)
         return output
 
 
@@ -80,7 +84,11 @@ class SceneInjecterX3D(SceneInjecterBase):
         (_, _, viewpoint) = self.parser.getViewpointAttributes(tree)
         camera = scene.camera
 
-        viewpoint.attrib['position'] = self.__getStringRepresentation(camera.translate)
+        final_translate = self.__getStringRepresentation(camera.translate)
+        viewpoint.attrib['position'] = final_translate
+
+        self.logger.info("Euler XYZ translation %s", final_translate)
+
         viewpoint.attrib['orientation'] = self.__getAxisAngleBasedRotation(camera.rotate)
 
         output = str(etree.tostring(tree, pretty_print=True))

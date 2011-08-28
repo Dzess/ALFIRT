@@ -4,6 +4,7 @@ Created on 10-05-2011
 @author: Piotr
 '''
 import os
+import logging
 
 class RenderGeneratorBase(object):
     '''
@@ -18,12 +19,13 @@ class BlenderGenerator(RenderGeneratorBase):
     '''
     Generates the .py file for rendering complaint with blender 2.57.
     '''
+    logger = logging.getLogger()
 
     def __findAlfirtPath(self):
         '''
             Gets the path to render.py located in resources
         '''
-        path = os.getcwd()
+        path = os.path.realpath(__file__)
         path = os.path.normpath(path)
 
         folders = []
@@ -81,6 +83,14 @@ class BlenderGenerator(RenderGeneratorBase):
 
         self.__putToken("INPUT_FOLDER", inputFolder)
         self.__putToken("OUTPUT_FOLDER", outputFolder)
+
+        # logging facility
+        self.logger.debug("Render file location: '" + self._renderFileLocation + "'")
+        self.logger.debug("Prepared tokens for render py replacement")
+        i = 0
+        for key, value in self._tokens.items():
+            self.logger.debug("Item %d with %s : %s", i, key, value)
+            i += 1
 
     def __replaceTokens(self, line):
         '''
