@@ -35,6 +35,14 @@ def main():
 
     #Import - b2.57
     import_x3d.load_web3d(fileNameInput)
+    
+    # Setting the active camera
+    for obj in bpy.context.visible_objects:
+        if obj.type == 'CAMERA':
+            viewpoint = obj
+    
+    ops.object.camera_add(location = viewpoint.location, rotation=viewpoint.rotation_euler)
+    bpy.context.scene.camera = viewpoint
 
     # Add sample diffuse light - called here area light 
     # TODO: set the light source behind the camera (view point)
