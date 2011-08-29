@@ -7,7 +7,7 @@ import logging
 
 from generator.data.SceneDescription import SceneDescription
 from generator.data.ObjectPose import ObjectPose
-from math import cos, sin, sqrt, radians, floor
+from math import cos, sin, sqrt, radians, floor, asin
 
 class SceneGeneratorBase(object):
     '''
@@ -49,6 +49,14 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
 
         self.logger.info("Scene generator calculated radius: " + str(self.radius))
 
+        # getting starting position (returning to the absolute 0 in degrees)
+
+        # arc sin 
+        alfa = asin(initCamera.translate[1] / self.radius)
+
+        self.startingCamera = self.initCamera
+
+
     def __getCount(self, interval):
         return ((interval.stop - interval.start) / interval.step) if interval.step != 0 else 0
 
@@ -63,9 +71,13 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
         r = radians(90 + alfaValue)
 
         # create the translation for the camera
-        translate = [x, y, self.initCamera.translate[2]]
-        rotate = [self.initCamera.rotate[0], self.initCamera.rotate[1], r]
+        translate = [x, y, self.startingCamera.translate[2]]
+        rotate = [self.startingCamera.rotate[0], self.startingCamera.rotate[1], r]
         camera = ObjectPose(translate=translate, rotate=rotate)
+
+        print("Scene " + str(i) + " with scene object values: ")
+        print(camera)
+
         return SceneDescription(camera, self.initAnchor)
 
 

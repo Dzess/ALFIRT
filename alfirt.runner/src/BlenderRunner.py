@@ -7,6 +7,7 @@ from generator.data.GeneratorDescription import GeneratorDescription
 
 import os
 import logging
+import shutil
 
 from generator.scene.SceneInjecterX3D import SceneInjecterX3D
 
@@ -70,7 +71,7 @@ class BlenderRunner(RunnerBase):
             os.mkdir(folder)
         else :
             path = os.path.abspath(folder)
-            raise RuntimeError("The specified folder already exists: " + path)
+            #raise RuntimeError("The specified folder already exists: " + path)
 
         self.logger.info("Creating folder: '" + folder + "'")
 
@@ -83,6 +84,7 @@ class BlenderRunner(RunnerBase):
                 - scripts/
             under the root blender_run_{date} || so called root folder
         '''
+        #shutil.rmtree(self.rootFolder)
         self.__tryCreatingFolder(self.rootFolder)
 
         modelsPath = os.path.join(self.rootFolder, self.generatorDescription.inputFolder)

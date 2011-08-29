@@ -3,6 +3,7 @@ Created on Jun 6, 2011
 
 @author: Piotr
 '''
+from math import degrees
 
 class ObjectPose(object):
     '''
@@ -22,8 +23,12 @@ class ObjectPose(object):
         self.rotate = rotate
 
     def __str__(self):
+        rotations = []
+        for rot in self.rotate:
+            rotations.append(degrees(rot))
+
         string = "Translation: " + str(self.translate) + '\n'
-        string += "Rotation: " + str(self.rotate) + '\n'
+        string += "Rotation: " + str(rotations) + '\n'
         return string
 
     def __eq__(self, o):
