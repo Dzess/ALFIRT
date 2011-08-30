@@ -42,11 +42,15 @@ if __name__ == '__main__':
 
     logger.info("Successfully loaded the configuration file and model file")
 
-
     # Overall model mechanics for using the renderer
     # TODO: make those elements plug via factories 
-    sg = SingleAxisSceneGenerator(gd, initCamera=initScene.camera, initAnchor=None)
-    rg = BlenderGenerator(gd, inputFolder=inputFolder, outputFolder=outputFolder)
+    sg = SingleAxisSceneGenerator(generatorDesc=gd,
+                                  initCamera=initScene.camera,
+                                  initAnchor=None)
+
+    rg = BlenderGenerator(generatorDescription=gd,
+                          inputFolder=inputFolder,
+                          outputFolder=outputFolder)
 
     # BlenderRunner
     logger.info("Running generator")

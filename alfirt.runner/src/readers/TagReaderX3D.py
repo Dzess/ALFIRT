@@ -5,6 +5,7 @@ Created on 10-05-2011
 '''
 import os
 import logging
+
 from lxml import etree
 
 from generator.data.SceneDescription import SceneDescription
@@ -21,7 +22,6 @@ class TagReaderX3D(object):
         Constructor
         '''
         self.parser = ParserX3D()
-
 
     def readScene(self, fileName):
         '''

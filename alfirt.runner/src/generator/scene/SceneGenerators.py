@@ -56,6 +56,10 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
 
         self.startingCamera = self.initCamera
 
+        # print out the camera settings
+        self.logger.info("Initial camera position: ")
+        self.logger.info(str(self.startingCamera))
+
 
     def __getCount(self, interval):
         return ((interval.stop - interval.start) / interval.step) if interval.step != 0 else 0

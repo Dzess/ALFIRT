@@ -8,6 +8,9 @@ import logging
 from lxml import etree
 from generator.data.ObjectPose import ObjectPose
 
+import math
+from mathutils import Quaternion, Euler, Matrix, Vector
+
 class ParserX3D(object):
     '''
         Helper class for X3D document parsings
@@ -76,6 +79,21 @@ class ParserX3D(object):
 
         return (position, orientation, viewpoint)
 
+    def __getAxisAngleFromEulerAngles(self, rotate, translate):
+        # TODO: implement this code from export.x3d
+        pass
+
+    def __getEulerAnglesFromAxisAngle(self, rotate, translate):
+
+        mtx = Matrix.Translation(Vector(translate)) * self.__translateRotation(rotate)
+        mtx = Matrix.Rotation(math.pi / 2.0, 4, 'X') * mtx
+        euler = mtx.to_euler()
+        return [euler.x, euler.y, euler.z]
+
+    def __translateRotation(self, rot):
+        ''' axis, angle '''
+        return Matrix.Rotation(rot[3], 4, Vector(rot[:3]))
+
     def getCameraElement(self, tree):
 
         (position, orientation, _) = self.getViewpointAttributes(tree)
@@ -87,17 +105,20 @@ class ParserX3D(object):
         orientations = orientation.split(' ')
         positions = position.split(' ')
 
+        # element are reversed in the x3d from blender
         translate = []
         translate.append(float(positions[0]))
-        translate.append(float(positions[1]))
         translate.append(float(positions[2]))
+        translate.append(float(positions[1]))
 
         rotate = []
         rotate.append(float(orientations[0]))
         rotate.append(float(orientations[1]))
         rotate.append(float(orientations[2]))
+        rotate.append(float(orientations[3]))
 
-        return ObjectPose(translate, rotate)
+        rotate_euler = self.__getEulerAnglesFromAxisAngle(rotate, translate)
+        return ObjectPose(translate, rotate_euler)
 
     def getAnchorElement(self, tree):
 
