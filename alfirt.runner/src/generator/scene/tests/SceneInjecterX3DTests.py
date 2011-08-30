@@ -46,7 +46,7 @@ class TagWriterX3DTests(unittest.TestCase):
                                  xmlns:alfirt="ALFIRT" 
                                  xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd ">
                             <Scene>
-                              <Viewpoint description='Rear View' orientation='1.0 0.0 0.0 0.0' position='0.0 0.0 0.0'/> 
+                              <Viewpoint description='Rear View' orientation='-0.9999999403953552 0.0 0.0 1.5707963705062866' position='0.0 0.0 0.0'/> 
                               <Shape alfirt:anchor_translate="0 1 2" alfirt:anchor_rotate="0.4 0.2 0.3">
                                 <IndexedFaceSet coordIndex="0 1 2">
                                   <Coordinate point="0 0 0 1 0 0 0.5 1 0"/>

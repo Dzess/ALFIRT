@@ -109,8 +109,8 @@ xsd:noNamespaceSchemaLocation=" http://www.web3d.org/specifications/x3d-3.2.xsd 
         self.assertEqual(translateAnchor, [0.0, 1.0, 2.0], 'Translate of the anchor should be 0 1 2')
         self.assertEqual(rotateAnchor , [0.4, 0.2, 0.3 ], "Rotate of the anchor should be 0.4, 0.2 0.3")
 
-        self.assertEqual(translateCamera, [0.0, 0.0, -10.0], "The position of the camera should be 0 0 -10")
-        self.assertEqual(rotateCamera, [0.0, 1.0, 0.0], "The rotation of the camera should be 0 1 0 3.14")
+        self.assertEqual(translateCamera, [0.0, -10, 0], "The position of the camera should be 0 0 -10")
+        self.assertEqual(rotateCamera, [1.5707963705062866, 1.7340079025429667e-13, 3.1415903568267822], "The rotation of the camera should be 0 1 0 3.14")
 
 #===============================================================================
 #  Test runner
