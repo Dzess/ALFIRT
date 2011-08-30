@@ -37,8 +37,9 @@ if __name__ == '__main__':
     initScene = parser.readX3DFile()
 
     rootFolder = "runner.output"
-    inputFolder = os.path.join(rootFolder, gd.inputFolder)
-    outputFolder = os.path.join(rootFolder, gd.outputFolder)
+    inputFolder = os.path.join(rootFolder, gd.inputFolder).replace('\\','\\\\').replace('\\\\\ ','\\\ ')
+    outputFolder = os.path.join(rootFolder, gd.outputFolder).replace('\\','\\\\').replace('\\\\\  ','\\\ ')
+    
 
     logger.info("Successfully loaded the configuration file and model file")
 
