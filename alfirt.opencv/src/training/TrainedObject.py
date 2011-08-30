@@ -11,18 +11,19 @@ class TrainedObject(object):
     '''
 
 
-    def __init__(self, orientation):
+    def __init__(self, name="ObjectName", orientation=None):
         '''
         Constructor
         
-        @param orientation: (imageDescription, surfFeatures, featuresDescriptors, matchQuality)
+        @param orientation: (imageDescription, surfFeatures, featuresDescriptors)
         '''
+        self.name = name
         self.orientations = [orientation]
         self.bestMatch = 0
         
     def addOrientation(self, orientation):
         '''
-        @param orientation: (imageDescription, surfFeatures, featuresDescriptors, matchQuality)
+        @param orientation: (imageDescription, surfFeatures, featuresDescriptors)
         '''
         self.orientations.append(orientation)
     
