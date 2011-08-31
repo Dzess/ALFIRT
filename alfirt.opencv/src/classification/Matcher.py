@@ -9,8 +9,6 @@ Based on find_obj.py OpenCV2 sample
 import numpy as np
 import cv2
 from common import anorm
-from functools import partial
-from jinja2._stringdefs import No
 
 class Matcher(object):
     

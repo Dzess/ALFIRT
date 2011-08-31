@@ -5,18 +5,13 @@ Created on 05-05-2011
 '''
 
 import cv2
-import numpy as np
 from optparse import OptionParser
 import sys
 from image.ImageDescription import ImageDescription
 from image.ImageDescriptionReader import ImageDescriptionReader
-import unittest
-from copy import deepcopy
 from numpy.ma.core import cos, sin
-import samples.find_obj as SampleMatch
 
-
-class NaiveRecognition(object):
+class FlannRecognition(object):
     
     
     def __init__(self, runType, imagePath, refImage):
@@ -85,40 +80,41 @@ class NaiveRecognition(object):
 
 
 if __name__ == '__main__':
-    print "OpenCV Learning Application"
+    print "Matcher Learning and Testing Application"
     
-    parser = OptionParser(usage="usage: %prog [options] [image_filename] [expected_output_file]")
+    parser = OptionParser(usage="usage: %prog [options] [learning_files_path] [test_files_path] [results_path]")
     parser.add_option("-r", "--runType", action="store", dest="runType", type="str",
-        help="Run selection learn|test. If \"learn\" is selected then expected output file path has to be provided.",
+        help="Run selection learn|test|full. \"learn\" requires 1st path, \"test\"  2nd and 3rd, \"full\" all three of them.",
         default="test")
     (options, args) = parser.parse_args()
     
-    if ((options.runType != "learn") & (options.runType != "test")):
+    learnPath, testPath, outPath = None
+    
+    if ((options.runType != "learn") & (options.runType != "test") & (options.runType != "full")):
         print "Invalid argument for -r option: " + options.runType
         sys.exit()
-    elif (options.runType == "test"):
-        if len(args) <= 1:
-            print "Required path to image file missing."
-            sys.exit()
-        print "Testing mode"
-        recognition = NaiveRecognition(options.runType, args[0], None)
-        
-    else:
-        if len(args) <= 2:
-            print "Required paths to image and expected output files missing."
+    elif (options.runType == "learn"):
+        if len(args) < 1:
+            print "Required path to directory with learning files missing."
             sys.exit()
         print "Learning mode"
-        recognition = NaiveRecognition(options.runType, args[0], args[1])
-        
+        learnPath = args[0]
+    elif (options.runType == "test"):
+        if len(args) < 2:
+            print "Missing some of the required paths (need testing_images_directory and output_directory)."
+            sys.exit()
+        print "Testing mode"
+        testPath = args[0]
+        outPath = args[1]
+    elif  (options.runType == "full"):
+        if len(args) < 3:
+            print "Missing some of the required paths."
+            sys.exit()
+        print "Learning followed by Testing mode."
+        learnPath = args[0]
+        testPath = args[1]
+        outPath = args[2]
     
-    # matching stuff
-    kp1, dsc1 = recognition.findSURF(recognition.loadImage(args[1]))
-    kp2, dsc2 = recognition.findSURF(recognition.loadImage(args[2]))
-
-    print 'img1 - %d features, img2 - %d features' % (len(kp1), len(kp2))
     
-    while cv2.waitKey() is not 27:
-        pass
-       
     
 
