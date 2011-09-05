@@ -16,7 +16,15 @@ class SceneGeneratorBase(object):
     def prepareScenes(self):
         raise NotImplementedError("This is abstract method")
 
-class DoubleAxisSceneGenerator(SceneGeneratorBase):
+
+class AngleBasedSceneGenerator(SceneGeneratorBase):
+    '''
+        Helper class for angle based ScenesGenerator
+    '''
+    def getCount(self, interval):
+        return ((interval.stop - interval.start) / interval.step) if interval.step != 0 else 0
+
+class DoubleAxisSceneGenerator(AngleBasedSceneGenerator):
     '''
         Generates @see: SceneDescription objects from @see: GeneratorDescription 
         providing two dimensional rotation in polar system. 
@@ -32,9 +40,72 @@ class DoubleAxisSceneGenerator(SceneGeneratorBase):
         @attention: 
             The coordinate system used to pass measure is Absolute (world)  XYZ Euler system.  
     '''
-    pass
 
-class SingleAxisSceneGenerator(SceneGeneratorBase):
+
+    roundPrecision = 15
+    logger = logging.getLogger()
+
+    def __init__(self, generatorDesc, initCamera, initAnchor=None):
+        '''
+            @param generatorDesc: object of class @see: GeneratorDescription
+            @param initCamera: object of class @see: ObjectPose
+            @param initAnchor: object of class @see: ObjectPose. Defaults to 
+                position of the (0,0,0) translate and (0,0,0) rotate.    
+        '''
+
+        if initAnchor == None:
+            initAnchor = ObjectPose([0, 0, 0], [0, 0, 0])
+
+        self.generatorDesc = generatorDesc
+        self.initCamera = initCamera
+        self.initAnchor = initAnchor
+
+
+    def __getBetaValue(self, i):
+        return i * self.generatorDesc.beta.step + self.generatorDesc.beta.start
+
+    def prepareScenes(self):
+
+        scenes = []
+
+        # get number of scenes for the double element
+        beta = self.generatorDesc.beta
+        count = int(floor(self.getCount(beta))) + 1
+
+        self.logger.info("Generating %d beta lines", count)
+
+        # Reading radius from generator description
+        radius = self.generatorDesc.radius.start
+
+        for i in range(0, count):
+
+            betaValue = self.__getBetaValue(i)
+
+            x = radius * round(cos(radians(betaValue)), self.roundPrecision)
+            y = self.initCamera.translate[1]
+            z = radius * round(sin(radians(betaValue)), self.roundPrecision)
+
+            p = self.initCamera.rotate[0]
+            q = radians(betaValue)
+            r = self.initCamera.rotate[2]
+
+            translate = [x, y, z]
+            rotate = [p, q, r]
+            currentInitCamera = ObjectPose(translate, rotate)
+
+            self.logger.debug("Current initial camera \n%s" % currentInitCamera)
+
+            single = SingleAxisSceneGenerator(generatorDesc=self.generatorDesc,
+                                              initCamera=currentInitCamera,
+                                              initAnchor=self.initAnchor)
+
+            singleAxisScenes = single.prepareScenes()
+            scenes.extend(singleAxisScenes)
+
+        return scenes
+
+
+class SingleAxisSceneGenerator(AngleBasedSceneGenerator):
     '''
         Generates @see: SceneDescription object from the @see: GeneratorDescription object.
         Uses only the alfa  for generation, thus camera moves in the ONE plane - the longitude plane. 
@@ -66,17 +137,13 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
         radiusXY = sqrt(cameraX * cameraX + cameraY * cameraY)
         self.radius = radiusXY
 
-        self.logger.info("Scene generator calculated radius: " + str(self.radius))
+        self.logger.info("Single Axis Scene generator calculated radius: " + str(self.radius))
 
         self.startingCamera = self.initCamera
 
         # print out the camera settings
         self.logger.info("Initial camera position: ")
         self.logger.info(str(self.startingCamera))
-
-
-    def __getCount(self, interval):
-        return ((interval.stop - interval.start) / interval.step) if interval.step != 0 else 0
 
 
     def __getScene(self, i, alfaValue):
@@ -93,9 +160,6 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
         rotate = [self.startingCamera.rotate[0], self.startingCamera.rotate[1], r]
         camera = ObjectPose(translate=translate, rotate=rotate)
 
-        print("Scene " + str(i) + " with scene object values: ")
-        print(camera)
-
         return SceneDescription(camera, self.initAnchor)
 
 
@@ -104,7 +168,7 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
             @see: SceneDescription with the provieded scene
         '''
 
-        alfaCount = self.__getCount(self.generatorDesc.alfa)
+        alfaCount = self.getCount(self.generatorDesc.alfa)
         alfaStep = self.generatorDesc.alfa.step
         alfaStart = self.generatorDesc.alfa.start
         result = []

@@ -23,9 +23,9 @@ class GeneratorInterval(object):
         self.step = step
 
     def __str__(self):
-        string = "Start: " + self.start + '\n'
-        string += "Stop: " + self.stop + '\n'
-        string += "Step: " + self.step + '\n'
+        string = "Start: " + str(self.start) + '\n'
+        string += "Stop: " + str(self.stop) + '\n'
+        string += "Step: " + str(self.step) + '\n'
         return string
 
     def __eq__(self, o):

@@ -10,6 +10,7 @@ from math import radians, sin, cos
 from generator.data.GeneratorInterval import GeneratorInterval
 from generator.data.ObjectPose import ObjectPose
 from generator.data.SceneDescription import SceneDescription
+from generator.scene.SceneGenerators import DoubleAxisSceneGenerator
 
 
 class DoubleAxisSceneGeneratorTests(unittest.TestCase, SceneGeneratorTestsBase):
@@ -55,7 +56,7 @@ class DoubleAxisSceneGeneratorTests(unittest.TestCase, SceneGeneratorTestsBase):
         expected_scene_3 = SceneDescription(ObjectPose(translate_3, rotate_3), initAnchor)
 
         # act
-        generator = DoubleAxisSceneGeneratorTests(
+        generator = DoubleAxisSceneGenerator(
                                              generatorDesc=generatorDesc,
                                              initCamera=initCamera,
                                              initAnchor=initAnchor)
@@ -92,8 +93,8 @@ class DoubleAxisSceneGeneratorTests(unittest.TestCase, SceneGeneratorTestsBase):
 
 
         # setting up expected scenes (line 1)
-        x_beta = cos(radians(30)) * self.radius
-        z_beta = sin(radians(30)) * self.radius
+        x_beta = round(cos(radians(30)), 15) * self.radius
+        z_beta = round(sin(radians(30)), 15) * self.radius
 
         # scene 1 (initial)
         translate_1 = self.initTranslate
@@ -128,7 +129,7 @@ class DoubleAxisSceneGeneratorTests(unittest.TestCase, SceneGeneratorTestsBase):
         expected_scene_6 = SceneDescription(ObjectPose(translate_6, rotate_6), initAnchor)
 
         # act
-        generator = DoubleAxisSceneGeneratorTests(
+        generator = DoubleAxisSceneGenerator(
                                              generatorDesc=generatorDesc,
                                              initCamera=initCamera,
                                              initAnchor=initAnchor)
