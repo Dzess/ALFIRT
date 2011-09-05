@@ -18,15 +18,18 @@ class FlannMatcher(object):
     FLANN_INDEX_KDTREE = 1  # OpenCV bug: flann enums are missing
     flann_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=4)
 
-    def __init__(self, trainedObjects, imageWithObject):
+    def __init__(self, trainedObjects, imageWithObject, surfThreshold=400):
         '''
         Constructor
         
         @param trainedObjects: List of @see: TrainedObject used as recognition DB
-        @param imageWithObject: Image containing one of the learnt objects. 
+        @param imageWithObject: Image containing one of the learnt objects.
+        @param surfThreshold:  Threshold that was used to train the objects (if equal for all)
         '''
         self.trainedObjects = trainedObjects
         self.image = imageWithObject
+        self.surfThreshold = surfThreshold
+        self.surf = cv2.SURF(self.surfThreshold)
 
     
     def addTrainedObject(self, trainedObject):
@@ -45,6 +48,7 @@ class FlannMatcher(object):
             if r < r_threshold:
                 res.append((i, n1))
         return np.array(res)
+    
 
     def matchUsingFlann(self, desc1, desc2, r_threshold=0.6):
         '''
@@ -59,6 +63,7 @@ class FlannMatcher(object):
         idx1 = np.arange(len(desc1))
         pairs = np.int32(zip(idx1, idx2[:, 0]))
         return pairs[mask]
+    
     
     def matchWithGivenflann(self, desc1, flannIndex, r_threshold=0.6):
         '''
@@ -123,19 +128,25 @@ class FlannMatcher(object):
                 cv2.line(vis, (x2 + w1 - r, y2 + r), (x2 + w1 + r, y2 - r), col, thickness)
         return vis
     
-    def matchObject(self, image, surfThreshold=400):
+    
+    def matchObject(self, image, surfThreshold=None):
         '''
         Finds best match for each object in the database.
         
         @param image: Image with object(s) to be found.
-        @param surfThreshold: Threshold for Hessian detector in SURF method.
+        @param surfThreshold: Threshold for Hessian detector in SURF method used for training the objects.
+        This method adapts however this threshold automatically basing on the read from each TrainedObject.
           
         @return: List of tuples (TrainedObject, bestMatchOrientationIndex, homographyStatus, homographyMatrix)
         '''
-        surf = cv2.SURF(surfThreshold)
-        kp, desc = surf.detect(image, None, False)
-        desc.shape = (-1, surf.descriptorSize())
-        flannIndex = cv2.flann_Index(desc, self.flann_params) #
+        # create new surf extractor only if needed
+        if (surfThreshold is not None) and (surfThreshold != self.surfThreshold):
+            self.surfThreshold = surfThreshold
+            self.surf = cv2.SURF(self.surfThreshold)
+            
+        kp, desc = self.surf.detect(image, None, False)
+        desc.shape = (-1, self.surf.descriptorSize())
+        flannIndex = cv2.flann_Index(desc, self.flann_params)
         
         # list of (TrainedObject, bestMatchOrientationIndex, homographyStatus, homographyMatrix)        
         bestMatches = None
@@ -143,9 +154,18 @@ class FlannMatcher(object):
         # simple searching for best matched orientation        
         for trainedObject in self.trainedObjects:
 
+            # we need to recreate the flann index if objects are trained with different thresholds
+            if (trainedObject.surfThreshold != self.surfThreshold) :
+                self.surfThreshold = trainedObject.surfThreshold
+                self.surf = cv2.SURF(self.surfThreshold)
+            
+                kp, desc = self.surf.detect(image, None, False)
+                desc.shape = (-1, self.surf.descriptorSize())
+                flannIndex = cv2.flann_Index(desc, self.flann_params)
+                 
             # (TrainedObject, bestMatchOrientationIndex, homographyStatus, homographyMatrix)
             bestMatchObject = (None, 0, None, None)
-            ind = 0;
+            ind = 0
                         
             for orientation in trainedObject.orientations:
                 # we are using flannMatcher, can change to bruteForce'''

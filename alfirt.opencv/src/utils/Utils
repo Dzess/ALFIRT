@@ -8,15 +8,19 @@ import cv2
 from numpy.ma.core import cos, sin
 
 
-class Visualization(object):
+class Utils(object):
     '''
     Contains methods useful for drawing processed images
     '''
     
-    def __init__(self):
+    def __init__(self, surfThreshold=400):
         '''
-        Constructor
+        Creates the utilties with default SURF extractor
+        
+        @param surfThreshold: Default HessianThreshold for SURF extractor.
         '''
+        self.threshold = surfThreshold
+        self.surf = cv2.SURF(self.threshold)
                 
     def showNewImageWindow(self, image, windowName):
         '''
@@ -28,7 +32,7 @@ class Visualization(object):
         cv2.imshow(windowName, image) #Show the image
 
     
-    def findSURF(self, image, threshold=400):
+    def findSURF(self, image, threshold=None):
         '''
         Finds SURF features in given image.
         
@@ -39,22 +43,20 @@ class Visualization(object):
         if  cv2.cv.fromarray(image).type != cv2.CV_8UC1:
             img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         else:
-            img = image.copy()            
+            img = image            
         
-        surf = cv2.SURF(threshold)
-        keypoints, descriptors = surf.detect(img, None, False)
+        # create new surf extractor only if needed
+        if (threshold is not None) and (threshold != self.threshold):
+            self.threshold = threshold
+            self.surf = cv2.SURF(threshold)
+            
+        keypoints, descriptors = self.surf.detect(img, None, False)
         
-        #drawing the keypoints
-        img = image.copy()
-        for key in keypoints :
-            self.drawKeypoint(img, key)
-        self.showNewImageWindow(img, "SURFED")
-        
-        descriptors.shape = (-1, surf.descriptorSize())
+        descriptors.shape = (-1, self.surf.descriptorSize())
         return keypoints, descriptors
     
         
-    def drawKeypoint(self, image, keypoints):
+    def drawKeypoints(self, image, keypoints):
         '''
         Draws SURF extracted keypoints fully emphasising discovered features (center,response,angle).
         
