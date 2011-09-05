@@ -7,10 +7,6 @@ Created on 05-05-2011
 from optparse import OptionParser
 import sys
 
-
- 
-
-
 if __name__ == '__main__':
     print "Matcher Learning and Testing Application"
     
@@ -46,7 +42,3 @@ if __name__ == '__main__':
         learnPath = args[0]
         testPath = args[1]
         outPath = args[2]
-    
-    
-    
-

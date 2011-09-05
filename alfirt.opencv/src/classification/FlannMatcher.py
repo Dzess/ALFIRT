@@ -10,27 +10,33 @@ import numpy as np
 import cv2
 from common import anorm
 
-class Matcher(object):
+class FlannMatcher(object):
+    '''
+    Main recognition and training module.
+    '''
     
-    '''
-    classdocs
-    '''
-    FLANN_INDEX_KDTREE = 1  # bug: flann enums are missing
+    FLANN_INDEX_KDTREE = 1  # OpenCV bug: flann enums are missing
     flann_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=4)
 
     def __init__(self, trainedObjects, imageWithObject):
         '''
         Constructor
+        
+        @param trainedObjects: List of @see: TrainedObject used as recognition DB
+        @param imageWithObject: Image containing one of the learnt objects. 
         '''
         self.trainedObjects = trainedObjects
         self.image = imageWithObject
 
     
     def addTrainedObject(self, trainedObject):
+        '''
+        Extends the loaded database with a new @see: TrainedObject
+        '''
         self.trainedObjects.append(trainedObject)        
     
 
-    def match_bruteforce(self, desc1, desc2, r_threshold=0.75):
+    def matchUsingBruteforce(self, desc1, desc2, r_threshold=0.75):
         res = []
         for i in xrange(len(desc1)):
             dist = anorm(desc2 - desc1[i])
@@ -40,15 +46,52 @@ class Matcher(object):
                 res.append((i, n1))
         return np.array(res)
 
-    def match_flann(self, desc1, desc2, r_threshold=0.6):
+    def matchUsingFlann(self, desc1, desc2, r_threshold=0.6):
+        '''
+        Internal flann descriptors matcher in order to find the best match.
+        
+        @param desc1, desc2: SURF features descriptors of currently processed object orientation and the test image.
+        @param r_threshold: Tunnable threshold for kNN normalized distance inside the descriptors space.
+        '''
         flann = cv2.flann_Index(desc2, self.flann_params)
         idx2, dist = flann.knnSearch(desc1, 2, params={}) # bug: need to provide empty dict
         mask = dist[:, 0] / dist[:, 1] < r_threshold
         idx1 = np.arange(len(desc1))
         pairs = np.int32(zip(idx1, idx2[:, 0]))
         return pairs[mask]
+    
+    def matchWithGivenflann(self, desc1, flannIndex, r_threshold=0.6):
+        '''
+        Internal flann descriptors matcher in order to find the best match.
+        
+        @param desc1: SURF features descriptors of currently processed object orientation and the test image.
+        @param flannIndex: PreGenerated FlannIndex to be used for searching 
+        @param r_threshold: Tunnable threshold for kNN normalized distance inside the descriptors space.
+        
+        @return: Array of matched points.
+        '''
+        idx2, dist = flannIndex.knnSearch(desc1, 2, params={}) # bug: need to provide empty dict
+        mask = dist[:, 0] / dist[:, 1] < r_threshold
+        idx1 = np.arange(len(desc1))
+        pairs = np.int32(zip(idx1, idx2[:, 0]))
+        return pairs[mask]
 
+        
     def draw_match(self, img1, img2, p1, p2, status=None, H=None):
+        '''
+        Allows visualization of a match by drawing lines between points on object and test image.
+        Also presents the recognized plane using RANSAC method.
+        
+        @param img1: Image of the recognized object used for training.
+        @param img2: Image containing the recognized object somewhere on its' scene.
+        @param p1: Matched points found on trained image.
+        @param p2: Matched points on the test image.
+        @param status: outputMask from @see cv2.findHomography()
+        @param H: the Homography matrix from @see cv2.findHomography()
+        
+        @return: Image of the match.    
+        '''
+        
         h1, w1 = img1.shape[:2]
         h2, w2 = img2.shape[:2]
         vis = np.zeros((max(h1, h2), w1 + w2), np.uint8)
@@ -82,22 +125,31 @@ class Matcher(object):
     
     def matchObject(self, image, surfThreshold=400):
         '''
-        @return: (TrainedObject, bestMatchOrientationIndex, homographyStatus, homographyMatrix)
+        Finds best match for each object in the database.
+        
+        @param image: Image with object(s) to be found.
+        @param surfThreshold: Threshold for Hessian detector in SURF method.
+          
+        @return: List of tuples (TrainedObject, bestMatchOrientationIndex, homographyStatus, homographyMatrix)
         '''
         surf = cv2.SURF(surfThreshold)
         kp, desc = surf.detect(image, None, False)
         desc.shape = (-1, surf.descriptorSize())
+        flannIndex = cv2.flann_Index(desc, self.flann_params) #
         
-        # (TrainedObject, bestMatchOrientationIndex, homographyStatus, homographyMatrix)
-        bestMatchObject = (None, 0, None, None)
-         
+        # list of (TrainedObject, bestMatchOrientationIndex, homographyStatus, homographyMatrix)        
+        bestMatches = None
+        
         # simple searching for best matched orientation        
         for trainedObject in self.trainedObjects:
-            # might be useful to add return all the objects with their best orientation match
+
+            # (TrainedObject, bestMatchOrientationIndex, homographyStatus, homographyMatrix)
+            bestMatchObject = (None, 0, None, None)
             ind = 0;
+                        
             for orientation in trainedObject.orientations:
                 # we are using flannMatcher, can change to bruteForce'''
-                matchResult = self.match_flann(orientation[2], desc)
+                matchResult = self.matchWithGivenflann(orientation[2], flannIndex) # optimized with preGenerated FlannIndex
                 matched_p1 = np.array([orientation[1][i].pt for i, j in matchResult])
                 matched_p2 = np.array([kp[j].pt for i, j in matchResult])
                 H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)
@@ -105,4 +157,9 @@ class Matcher(object):
                 if len(status) > len(bestMatchObject[2]):
                     bestMatchObject = (trainedObject, ind, status, H)
                 ind += 1
-        return bestMatchObject
+                
+            # appends to the results the best match for each TrainedObject
+            bestMatches.append(bestMatchObject)
+            
+        return bestMatches
+
