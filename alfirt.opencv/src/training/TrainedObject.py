@@ -4,7 +4,7 @@ Created on 29-08-2011
 @author: Ankhazam
 '''
 from cPickle import load,dump
-from test.test_datetime import PicklableFixedOffset
+
 class TrainedObject(object):
     '''
     classdocs
@@ -28,11 +28,11 @@ class TrainedObject(object):
         self.orientations.append(orientation)
     
     def load(self,path):
-        with open(path) as file:
-            self.orientations = load(file)
+        with open(path) as ofile:
+            self.orientations = load(ofile)
             self.bestMatch = 0
         
     def save(self,path):
-        with open(path,'wb') as file:
-            dump(self.orientations, file)
+        with open(path,'wb') as sfile:
+            dump(self.orientations, sfile)
         
