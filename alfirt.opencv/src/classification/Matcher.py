@@ -106,39 +106,3 @@ class Matcher(object):
                     bestMatchObject = (trainedObject, ind, status, H)
                 ind += 1
         return bestMatchObject
-#                
-#if __name__ == '__main__':
-#    import sys
-#    try: fn1, fn2 = sys.argv[1:3]
-#    except:
-#        fn1 = '../c/box.png'
-#        fn2 = '../c/box_in_scene.png'
-#
-#    img1 = cv2.imread(fn1, 0)
-#    img2 = cv2.imread(fn2, 0)
-#
-#    surf = cv2.SURF(400)
-#    kp1, desc1 = surf.detect(img1, None, False)
-#    kp2, desc2 = surf.detect(img2, None, False)
-#    desc1.shape = (-1, surf.descriptorSize())
-#    desc2.shape = (-1, surf.descriptorSize())
-#    print 'img1 - %d features, img2 - %d features' % (len(kp1), len(kp2))
-#
-#    def match_and_draw(self, match, r_threshold):
-#        m = match(desc1, desc2, r_threshold)
-#        matched_p1 = np.array([kp1[i].pt for i, j in m])
-#        matched_p2 = np.array([kp2[j].pt for i, j in m])
-#        H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)
-#        print '%d / %d  inliers/matched' % (np.sum(status), len(status))
-#
-#        vis = self.draw_match(img1, img2, matched_p1, matched_p2, status, H)
-#        return vis
-#
-#    print 'bruteforce match:',
-#    vis_brute = match_and_draw(match_bruteforce, 0.75)
-#    print 'flann match:',
-#    vis_flann = match_and_draw(match_flann, 0.6) # flann tends to find more distant second
-#                                                   # neighbours, so r_threshold is decreased
-#    cv2.imshow('find_obj SURF', vis_brute)
-#    cv2.imshow('find_obj SURF flann', vis_flann)
-#    cv2.waitKey()

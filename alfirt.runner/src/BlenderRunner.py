@@ -64,7 +64,7 @@ class BlenderRunner(RunnerBase):
 
     def __tryCreatingFolder(self, folder):
         '''
-            Creates new folder if there is no such foldeer 
+            Creates new folder if there is no such folder 
             if there is then raises exception 
         '''
         if not os.path.isdir(folder):
