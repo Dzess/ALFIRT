@@ -6,11 +6,32 @@ Created on 05-05-2011
 
 from optparse import OptionParser
 import sys
+import os
+
+def train(learningPath):
+    '''
+    Trains the system with new object data
+    
+    @param learningPath: Has to be root of the following structure
+    
+    learningPath
+        |_ObjectA
+        |    |_1.imd, 1.ren
+        |    |_...
+        |_ObjectB
+        |    |_...
+        |_ObjectC
+             |_...
+    
+    @return: List of @see: TrainedObject
+    '''
+    for (root,dirs,files) in os.walk(learningPath):
+        None
 
 if __name__ == '__main__':
     print "Matcher Learning and Testing Application"
     
-    parser = OptionParser(usage="usage: %prog [options] [learning_files_path] [test_files_path] [results_path]")
+    parser = OptionParser(usage="usage: %prog [options] [learning_files_path/dbase_file_path] [test_files_path] [results_path]")
     parser.add_option("-r", "--runType", action="store", dest="runType", type="str",
         help="Run selection learn|test|full. \"learn\" requires 1st path, \"test\"  2nd and 3rd, \"full\" all three of them.",
         default="test")
@@ -28,8 +49,8 @@ if __name__ == '__main__':
         print "Learning mode"
         learnPath = args[0]
     elif (options.runType == "test"):
-        if len(args) < 2:
-            print "Missing some of the required paths (need testing_images_directory and output_directory)."
+        if len(args) < 3:
+            print "Missing some of the required paths (need path_to_trainedDBase, testing_images_directory and output_directory)."
             sys.exit()
         print "Testing mode"
         testPath = args[0]
