@@ -5,26 +5,18 @@ Created on Aug 27, 2011
 '''
 import unittest
 from math import radians
-from math import sqrt
 from generator.scene.SceneGenerators import SingleAxisSceneGenerator
 from generator.data.ObjectPose import ObjectPose
-from mockito.mocking import mock
 from generator.data.GeneratorInterval import GeneratorInterval
 from mockito.mockito import verify
 from generator.data.SceneDescription import SceneDescription
+from generator.scene.tests.SceneGeneratorTestsBase import SceneGeneratorTestsBase
 
-class SingleAxisSceneGeneratorTests(unittest.TestCase):
+class SingleAxisSceneGeneratorTests(unittest.TestCase, SceneGeneratorTestsBase):
     '''
         Testing generation of the scene using the 
         @see: SingleAxisSceneGenerator
     '''
-
-
-    def __getDifferMessage(self, expected, actual):
-        string = "Scene differs: expected:" + str(expected) + "\n"
-        string += "but got " + str(actual) + "\n"
-        return  string
-
 
     def test_rotation_by_3_points(self):
         '''
@@ -37,16 +29,12 @@ class SingleAxisSceneGeneratorTests(unittest.TestCase):
         initRotate = [radians(60), radians(0), radians(90)]
 
         alfa = GeneratorInterval(0, 180, 90)
-        beta = None
-        radius_sqrt = sqrt(25 + 25)
-        radius = GeneratorInterval(start=radius_sqrt, stop=radius_sqrt)
-        generatorDesc = mock(mocked_obj=None, strict=True)
+        beta = GeneratorInterval(5, 5)
 
-        generatorDesc.alfa = alfa
-        generatorDesc.beta = beta
-        generatorDesc.radius = radius
+        generatorDesc = self.getGeneratorDescription(alfa, beta, initTranslate)
+
         initCamera = ObjectPose(initTranslate, initRotate)
-        initAnchor = ObjectPose([0, 0, 0], [0, 0, 0])
+        initAnchor = self.getInitAnchor()
 
         # setting up expected scenes
 
@@ -66,7 +54,10 @@ class SingleAxisSceneGeneratorTests(unittest.TestCase):
         expected_scene_3 = SceneDescription(ObjectPose(translate_3, rotate_3), initAnchor)
 
         # act
-        generator = SingleAxisSceneGenerator(generatorDesc, initCamera, initAnchor=initAnchor)
+        generator = SingleAxisSceneGenerator(
+                                             generatorDesc=generatorDesc,
+                                             initCamera=initCamera,
+                                             initAnchor=initAnchor)
         scenes = generator.prepareScenes()
 
         # verify calling generator intervals
@@ -77,15 +68,15 @@ class SingleAxisSceneGeneratorTests(unittest.TestCase):
 
         # assertions about each scene values
         self.assertEqual(scenes[0], expected_scene_1,
-                         self.__getDifferMessage(expected_scene_1, scenes[0]))
+                         self.getDifferMessage(expected_scene_1, scenes[0]))
         self.assertEqual(scenes[1], expected_scene_2,
-                         self.__getDifferMessage(expected_scene_2, scenes[1]))
+                         self.getDifferMessage(expected_scene_2, scenes[1]))
         self.assertEqual(scenes[2], expected_scene_3,
-                         self.__getDifferMessage(expected_scene_3, scenes[2]))
+                         self.getDifferMessage(expected_scene_3, scenes[2]))
 
 
     def test_rotation_by_no_values(self):
-
+        # TODO: code this test up !
         pass
 
 

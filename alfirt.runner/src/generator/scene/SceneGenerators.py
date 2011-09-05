@@ -7,7 +7,7 @@ import logging
 
 from generator.data.SceneDescription import SceneDescription
 from generator.data.ObjectPose import ObjectPose
-from math import cos, sin, sqrt, radians, floor, asin
+from math import cos, sin, sqrt, radians, floor
 
 class SceneGeneratorBase(object):
     '''
@@ -16,12 +16,31 @@ class SceneGeneratorBase(object):
     def prepareScenes(self):
         raise NotImplementedError("This is abstract method")
 
+class DoubleAxisSceneGenerator(SceneGeneratorBase):
+    '''
+        Generates @see: SceneDescription objects from @see: GeneratorDescription 
+        providing two dimensional rotation in polar system. 
+        
+        Basing on the alfa angle passed in GeneratorDescription the rotation in horizontal plane
+        is done, exactly the same as longitude in geographic. The beta angle specifies the latitude 
+        or the vertical rotation in polar system.
+        
+        The rotations based on alfa and beta angles are completely independent. Meaning that:
+        for each step in alfa the all beta positions are computed and generated. The output array of scenes 
+        for this algorithm is the network of ALL positions defined by alfa, beta Cartesian product.
+        
+        @attention: 
+            The coordinate system used to pass measure is Absolute (world)  XYZ Euler system.  
+    '''
+    pass
 
 class SingleAxisSceneGenerator(SceneGeneratorBase):
     '''
-    Generates @see: SceneDescription object from the @see: GeneratorDescription object.
-    Uses only the alfa OR beta angels for generation, thus camera moves in the 
-    ONE surface !
+        Generates @see: SceneDescription object from the @see: GeneratorDescription object.
+        Uses only the alfa  for generation, thus camera moves in the ONE plane - the longitude plane. 
+        
+        @attention: 
+             The coordinate system used to pass measure is Absolute (world)  XYZ Euler system.
     '''
     roundPrecision = 15
     logger = logging.getLogger()
@@ -48,11 +67,6 @@ class SingleAxisSceneGenerator(SceneGeneratorBase):
         self.radius = radiusXY
 
         self.logger.info("Scene generator calculated radius: " + str(self.radius))
-
-        # getting starting position (returning to the absolute 0 in degrees)
-
-        # arc sin 
-        alfa = asin(initCamera.translate[1] / self.radius)
 
         self.startingCamera = self.initCamera
 

@@ -8,8 +8,6 @@ class SceneDescription(object):
     '''
     @summary: Depicts the scene in the context of the cameras and axis. 
     A quite versatile class should this be.
-    
-    @attention: this class is not finished or closed yet. 
     '''
 
 
