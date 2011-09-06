@@ -18,16 +18,14 @@ class FlannMatcher(object):
     FLANN_INDEX_KDTREE = 1  # OpenCV bug: flann enums are missing
     flann_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=4)
 
-    def __init__(self, trainedObjects, imageWithObject, surfThreshold=400):
+    def __init__(self, trainedObjects, surfThreshold=400):
         '''
         Constructor
         
         @param trainedObjects: List of @see: TrainedObject used as recognition DB
-        @param imageWithObject: Image containing one of the learnt objects.
         @param surfThreshold:  Threshold that was used to train the objects (if equal for all)
         '''
         self.trainedObjects = trainedObjects
-        self.image = imageWithObject
         self.surfThreshold = surfThreshold
         self.surf = cv2.SURF(self.surfThreshold)
 
@@ -124,6 +122,7 @@ class FlannMatcher(object):
             for orientation in trainedObject.orientations:
                 # we are using flannMatcher, can change to bruteForce'''
                 matchResult = self.__matchWithGivenflann(orientation[2], flannIndex) # optimized with preGenerated FlannIndex
+                # matchResult = self.__matchUsingBruteforce(orientation[2], desc) # we can use Brute
                 matched_p1 = np.array([orientation[1][i].pt for i, j in matchResult])
                 matched_p2 = np.array([kp[j].pt for i, j in matchResult])
                 H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)

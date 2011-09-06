@@ -7,10 +7,12 @@ Created on 05-05-2011
 from optparse import OptionParser
 import sys
 import os
+import classification.FlannMatcher as FM
 import classification.TrainedObject as TO
 import image.ImageDescriptionReader as IDR
 import cv2
 import utils.Utils as TU
+
 
 
 def train(learningPath, threshold=400):
@@ -100,8 +102,9 @@ if __name__ == '__main__':
         print "Learning mode"
         learnPath = args[0]
         
-        train(learnPath,options.threshold)
-        
+        train(learnPath,options.threshold) #TODO: Add saving of the DBASE
+
+        print "done learning"
     
     elif (options.runType == "test"):
         if len(args) < 3:
@@ -121,6 +124,15 @@ if __name__ == '__main__':
         learnPath = args[0]
         testPath = args[1]
         outPath = args[2]
-        
-        raise NotImplementedError("To be added")
 
+        trainedObjects = train(learnPath,options.threshold)
+        cvUtilities = TU.Utils(options.threshold)
+        
+        bestMatches = list()
+        for file1 in os.listdir(args[1]):
+            testImage = cv2.imread(os.path.join(args[1],file1), cv2.IMREAD_GRAYSCALE)
+            matcher = FM.FlannMatcher(trainedObjects, options.threshold)
+            bestMatches.append(matcher.matchObject(testImage))
+            
+        # TODO: do something with the found bestMatches ;)
+        print "done full"
