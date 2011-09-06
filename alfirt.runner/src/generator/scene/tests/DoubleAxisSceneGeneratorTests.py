@@ -17,7 +17,7 @@ class DoubleAxisSceneGeneratorTests(unittest.TestCase, SceneGeneratorTestsBase):
 
     def setUp(self):
         self.initTranslate = [5, 0, 0]
-        self.initRotate = [radians(60), radians(0), radians(90)]
+        self.initRotate = [radians(90), radians(0), radians(90)]
 
         self.alfa = GeneratorInterval(0, 180, 90)
         self.radius = 5
@@ -47,12 +47,12 @@ class DoubleAxisSceneGeneratorTests(unittest.TestCase, SceneGeneratorTestsBase):
 
         # scene 2
         translate_2 = [0, 5, 0]
-        rotate_2 = [radians(60), radians(0), radians(180)]
+        rotate_2 = [radians(90), radians(0), radians(180)]
         expected_scene_2 = SceneDescription(ObjectPose(translate_2, rotate_2), initAnchor)
 
         # scene 3
         translate_3 = [-5, 0, 0]
-        rotate_3 = [radians(60), radians(0), radians(270)]
+        rotate_3 = [radians(90), radians(0), radians(270)]
         expected_scene_3 = SceneDescription(ObjectPose(translate_3, rotate_3), initAnchor)
 
         # act
@@ -103,29 +103,29 @@ class DoubleAxisSceneGeneratorTests(unittest.TestCase, SceneGeneratorTestsBase):
 
         # scene 2
         translate_2 = [0, 5, 0]
-        rotate_2 = [radians(60), radians(0), radians(180)]
+        rotate_2 = [radians(90), radians(0), radians(180)]
         expected_scene_2 = SceneDescription(ObjectPose(translate_2, rotate_2), initAnchor)
 
         # scene 3
         translate_3 = [-5, 0, 0]
-        rotate_3 = [radians(60), radians(0), radians(270)]
+        rotate_3 = [radians(90), radians(0), radians(270)]
         expected_scene_3 = SceneDescription(ObjectPose(translate_3, rotate_3), initAnchor)
 
         # second line of scenes
 
         # scene 4  
         translate_4 = [x_beta, 0, z_beta]
-        rotate_4 = [radians(60), radians(30), radians(90)]
+        rotate_4 = [radians(60), radians(0), radians(90)]
         expected_scene_4 = SceneDescription(ObjectPose(translate_4, rotate_4), initAnchor)
 
         # scene 5
         translate_5 = [0, x_beta, z_beta]
-        rotate_5 = [radians(60), radians(30), radians(180)]
+        rotate_5 = [radians(60), radians(0), radians(180)]
         expected_scene_5 = SceneDescription(ObjectPose(translate_5, rotate_5), initAnchor)
 
         # scene 6
         translate_6 = [-x_beta, 0, z_beta]
-        rotate_6 = [radians(60), radians(30), radians(270)]
+        rotate_6 = [radians(60), radians(0), radians(270)]
         expected_scene_6 = SceneDescription(ObjectPose(translate_6, rotate_6), initAnchor)
 
         # act

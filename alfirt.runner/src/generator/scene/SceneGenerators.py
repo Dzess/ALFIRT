@@ -85,8 +85,8 @@ class DoubleAxisSceneGenerator(AngleBasedSceneGenerator):
             y = self.initCamera.translate[1]
             z = radius * round(sin(radians(betaValue)), self.roundPrecision)
 
-            p = self.initCamera.rotate[0]
-            q = radians(betaValue)
+            p = radians(90 - betaValue)
+            q = self.initCamera.rotate[1]
             r = self.initCamera.rotate[2]
 
             translate = [x, y, z]
