@@ -60,6 +60,11 @@ class DoubleAxisSceneGenerator(AngleBasedSceneGenerator):
         self.initCamera = initCamera
         self.initAnchor = initAnchor
 
+        x = initCamera.translate[0]
+        y = initCamera.translate[1]
+        z = initCamera.translate[2]
+        self.radius = sqrt(x * x + y * y)
+        self.radius = sqrt(self.radius * self.radius + z * z)
 
     def __getBetaValue(self, i):
         return i * self.generatorDesc.beta.step + self.generatorDesc.beta.start
@@ -75,14 +80,14 @@ class DoubleAxisSceneGenerator(AngleBasedSceneGenerator):
         self.logger.info("Generating %d beta lines", count)
 
         # Reading radius from generator description
-        radius = self.generatorDesc.radius.start
+        radius = self.radius
 
         for i in range(0, count):
 
             betaValue = self.__getBetaValue(i)
 
             x = radius * round(cos(radians(betaValue)), self.roundPrecision)
-            y = self.initCamera.translate[1]
+            y = 0
             z = radius * round(sin(radians(betaValue)), self.roundPrecision)
 
             p = radians(90 - betaValue)
@@ -94,7 +99,6 @@ class DoubleAxisSceneGenerator(AngleBasedSceneGenerator):
             currentInitCamera = ObjectPose(translate, rotate)
 
             self.logger.debug("Current initial camera \n%s" % currentInitCamera)
-
             single = SingleAxisSceneGenerator(generatorDesc=self.generatorDesc,
                                               initCamera=currentInitCamera,
                                               initAnchor=self.initAnchor)
