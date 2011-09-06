@@ -38,7 +38,7 @@ class ImageDescriptionReader(object):
         r = float(lines[9])
 
         # now @data
-        numberOfPoints = int(lines[11])
+        numberOfPoints = int(float(lines[11]))
         points = []
         for i in range(0, numberOfPoints, 1):
             words = lines[12 + i].split(' ')

@@ -39,7 +39,7 @@ class FlannMatcher(object):
         self.trainedObjects.append(trainedObject)        
     
 
-    def matchUsingBruteforce(self, desc1, desc2, r_threshold=0.75):
+    def __matchUsingBruteforce(self, desc1, desc2, r_threshold=0.75):
         res = []
         for i in xrange(len(desc1)):
             dist = anorm(desc2 - desc1[i])
@@ -50,7 +50,7 @@ class FlannMatcher(object):
         return np.array(res)
     
 
-    def matchUsingFlann(self, desc1, desc2, r_threshold=0.6):
+    def __matchUsingFlann(self, desc1, desc2, r_threshold=0.6):
         '''
         Internal flann descriptors matcher in order to find the best match.
         
@@ -65,7 +65,7 @@ class FlannMatcher(object):
         return pairs[mask]
     
     
-    def matchWithGivenflann(self, desc1, flannIndex, r_threshold=0.6):
+    def __matchWithGivenflann(self, desc1, flannIndex, r_threshold=0.6):
         '''
         Internal flann descriptors matcher in order to find the best match.
         
@@ -123,7 +123,7 @@ class FlannMatcher(object):
                         
             for orientation in trainedObject.orientations:
                 # we are using flannMatcher, can change to bruteForce'''
-                matchResult = self.matchWithGivenflann(orientation[2], flannIndex) # optimized with preGenerated FlannIndex
+                matchResult = self.__matchWithGivenflann(orientation[2], flannIndex) # optimized with preGenerated FlannIndex
                 matched_p1 = np.array([orientation[1][i].pt for i, j in matchResult])
                 matched_p2 = np.array([kp[j].pt for i, j in matchResult])
                 H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)
