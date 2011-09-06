@@ -20,7 +20,10 @@ class TrainedObject(object):
         '''
         self.name = name
         self.surfThreshold = surfThreshold
-        self.orientations = orientations
+        if type(orientations) == type(list()):
+            self.orientations = orientations
+        else:
+            self.orientations = list()
         self.bestMatch = 0
         
     def addOrientation(self, threshold, orientation):
