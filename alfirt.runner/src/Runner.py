@@ -10,20 +10,41 @@ command line. Takes command line arguments.
 import sys
 import os
 import logging
-from generator.BlenderGenerator import BlenderGenerator
-from BlenderRunner import BlenderRunner
-from generator.scene.SceneGenerators import DoubleAxisSceneGenerator
-from readers.ConfigReader import ConfigReader
-from readers.TagReaderX3D import TagReaderX3D
-from ArgumentParser import ArgumentParser
 
-if __name__ == '__main__':
-
+def loggerSetUp():
     logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
     logger = logging.getLogger()
     logger.setLevel(level=logging.INFO)
+    logger.info("Welcome to ALFIRT project v.0.2 alfa")
+    return logger
 
-    logger.info("Welcome to ALFIRT project v.0.1 alfa")
+def commonsPathSetUp(logger):
+    commonNames = os.path.join(__file__, "..", "..", "..", "alfirt.common", "src")
+    commonsPath = os.path.abspath(commonNames)
+
+    logger.info("Appending '%s' " % commonsPath)
+    sys.path.append(commonsPath)
+
+if __name__ == '__main__':
+
+    logger = loggerSetUp()
+
+    logger.info("Adding to PYTHONPATH requirements from ALFIRT")
+    commonsPathSetUp(logger)
+    # NOTE: additional path set up here
+
+    # import section
+    logger.info("Importing ALFIRT requirements")
+    try:
+        from generator.BlenderGenerator import BlenderGenerator
+        from BlenderRunner import BlenderRunner
+        from generator.scene.SceneGenerators import DoubleAxisSceneGenerator
+        from readers.ConfigReader import ConfigReader
+        from readers.TagReaderX3D import TagReaderX3D
+        from ArgumentParser import ArgumentParser
+    except ImportError as ie:
+        logger.error("The import of ALFIRT requirements was not succesful:\n%s" % ie)
+        sys.exit(1)
 
     # TODO: make this code working with other file formats than x3d only
     configReader = ConfigReader()

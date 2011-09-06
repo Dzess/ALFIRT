@@ -3,8 +3,7 @@
 	<name>alfirt.runner</name>
 	<comment></comment>
 	<projects>
-		<project>alfirt.classifier</project>
-		<project>alfirt.verifier</project>
+		<project>alfirt.common</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

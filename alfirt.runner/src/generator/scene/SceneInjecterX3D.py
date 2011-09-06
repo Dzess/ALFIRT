@@ -73,9 +73,6 @@ class SceneInjecterX3D(SceneInjecterBase):
         orientation = self.__getStringRepresentation(axises) + " " + str(angle)
         translation = self.__getStringRepresentation(loc)
 
-        print("Decomposed translation" + translation)
-        print("Decomposed orientation: " + orientation)
-
         return translation, orientation
 
 

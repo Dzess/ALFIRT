@@ -3,6 +3,7 @@
 	<name>alfirt.verifier</name>
 	<comment></comment>
 	<projects>
+		<project>alfirt.common</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

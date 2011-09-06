@@ -10,6 +10,8 @@ import logging
 import shutil
 
 from generator.scene.SceneInjecterX3D import SceneInjecterX3D
+from image.ImageDescription import ImageDescription
+from image.ImageDescriptionWriter import ImageDescriptionWriter
 
 class RunnerBase(object):
     '''
@@ -149,6 +151,40 @@ class BlenderRunner(RunnerBase):
 
         return render_script_file
 
+
+    def __createImageDescription(self, scene, renderFile):
+        '''
+            Initializes the instance of @see: ImageDescription class 
+            and saves it into file
+        '''
+
+        # creating the object
+        name = renderFile.replace(".py", self.generatorDescription.outputFormat)
+
+        translate = scene.camera.translate
+        rotate = scene.camera.rotate
+
+        img = ImageDescription(name=name,
+                               x=translate[0],
+                               y=translate[1],
+                               z=translate[2],
+                               p=rotate[0],
+                               q=rotate[1],
+                               r=rotate[2],
+                               points=[])
+
+        self.logger.debug("Image description object created \n'%s'" % img)
+
+        # saving to file
+        fileName = renderFile.replace(".py", ".imd")
+        fileName = fileName.replace("scripts", self.generatorDescription.outputFolder)
+
+        writer = ImageDescriptionWriter()
+        with open(fileName, 'w') as fileStream :
+            writer.write(stream=fileStream, imageDescription=img)
+
+        self.logger.info("Image description written to '%s'" % fileName)
+
     def execute(self):
         '''
             Runs the script and returns the string with output.
@@ -176,5 +212,8 @@ class BlenderRunner(RunnerBase):
             stream = os.popen(command)
 
             self.logger.debug("Blender output: '" + stream.read() + "'")
+
+            # create the image description
+            self.__createImageDescription(scene, render_file)
 
             i += 1
