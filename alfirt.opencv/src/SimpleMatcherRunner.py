@@ -155,7 +155,12 @@ if __name__ == '__main__':
 
         trainedObjects = train(learnPath, options.threshold)
         cvUtilities = TU.Utils(options.threshold)
-
+#
+#        for obj in trainedObjects:
+#            for orient in obj.orientations:
+#                print len(orient[1]), len(orient[2])
+#
+#                
         bestMatches = list()
         for file1 in os.listdir(args[1]):
 
@@ -176,4 +181,8 @@ if __name__ == '__main__':
             bestMatches.append(match)
 
         # TODO: do something with the found bestMatches ;)
+        
+        for match in bestMatches:
+            print "Object Name: ", match[0][0].name
+            print "OrientationName: ", match[0][0].orientations[match[0][1]][0].name
         print "done full"
