@@ -71,6 +71,10 @@ def train(learningPath, threshold=400):
             # real training
             for file1 in set(orientationNames): # we won't implement natural human sorting
 
+                # do not use .* files
+                if file1.startswith('.'):
+                    continue
+
                 # fetching ImageDescription
                 imDescPath = os.path.join(root, file1) + ".imd"
                 print "imd: ", imDescPath
@@ -154,9 +158,22 @@ if __name__ == '__main__':
 
         bestMatches = list()
         for file1 in os.listdir(args[1]):
-            testImage = cv2.imread(os.path.join(args[1], file1), cv2.IMREAD_GRAYSCALE)
+
+            # do not use .* files
+            if file1.startswith("."):
+                continue
+
+            # flags are set to 0 = meaning grey scale
+            testImage = cv2.imread(os.path.join(args[1], file1), flags=0)
+            print "Loaded test image : '%s'" % file1
+
             matcher = FM.FlannMatcher(trainedObjects, options.threshold)
-            bestMatches.append(matcher.matchObject(testImage))
+            print "Getting matcher"
+
+            match = matcher.matchObject(testImage)
+            print "Found match for file '%s'" % file1
+
+            bestMatches.append(match)
 
         # TODO: do something with the found bestMatches ;)
         print "done full"

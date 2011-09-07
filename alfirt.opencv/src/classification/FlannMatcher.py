@@ -97,8 +97,13 @@ class FlannMatcher(object):
             self.surf = cv2.SURF(self.surfThreshold)
 
         kp, desc = self.surf.detect(image, None, False)
+        print "Found SURF features of the passed image"
+
         desc.shape = (-1, self.surf.descriptorSize())
+        print "Created shape from descriptor"
+
         flannIndex = cv2.flann_Index(desc, self.flann_params)
+        print "Found flann index"
 
         # list of (TrainedObject, bestMatchOrientationIndex, homographyStatus, homographyMatrix)        
         bestMatches = None
