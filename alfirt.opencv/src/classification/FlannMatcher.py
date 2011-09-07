@@ -125,24 +125,24 @@ class FlannMatcher(object):
             ind = 0
 
             for orientation in trainedObject.orientations:
-                print len(orientation[1])
+                #print len(orientation[1])
                 # we are using flannMatcher, can change to bruteForce'''
                 matchResult = self.__matchWithGivenflann(orientation[2], flannIndex) # optimized with preGenerated FlannIndex
                 # matchResult = self.__matchUsingBruteforce(orientation[2], desc) # we can use Brute
                 matched_p1 = np.array([orientation[1][i].pt for i, j in matchResult])
                 matched_p2 = np.array([kp[j].pt for i, j in matchResult])
                 
-                print len(matched_p1), len(matched_p2)
+                #print len(matched_p1), len(matched_p2)
 
                 try:
                     H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)
-                    print "Orientation name: ", orientation[0].name
-                    print '%d / %d  inliers/matched' % (np.sum(status), len(status))
+                    #print "Orientation name: ", orientation[0].name
+                    #print '%d / %d  inliers/matched' % (np.sum(status), len(status))
 
                     if (bestMatchObject is None) or (len(status) > len(bestMatchObject[2])) :
-                        print "Set new best match with len: ", len(status)
-                        print "Index: ", ind
-                        print "New Orientation name: ", orientation[0].name
+                        #print "Set new best match with len: ", len(status)
+                        #print "Index: ", ind
+                        #print "New Orientation name: ", orientation[0].name
                         bestMatchObject = (trainedObject, ind, status, H)                    
                 except :
                     print "Flann homography matrix error"
@@ -150,7 +150,7 @@ class FlannMatcher(object):
                 ind += 1
 
             # appends to the results the best match for each TrainedObject
-            print "AppendingBestRelutionObject: ", len(bestMatchObject[2])
+#            print "AppendingBestRelutionObject: ", len(bestMatchObject[2])
             bestMatches.append(bestMatchObject)
 
         return bestMatches

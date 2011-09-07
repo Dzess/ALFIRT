@@ -8,6 +8,7 @@ Created on 05-05-2011
 from optparse import OptionParser
 import sys
 import os
+import shutil
 
 def pathSetUp():
     print "Setting up internal paths to PYTHONPATH"
@@ -108,6 +109,7 @@ if __name__ == '__main__':
         import classification.FlannMatcher as FM
         import classification.TrainedObject as TO
         import image.ImageDescriptionReader as IDR
+        import image.ImageDescriptionWriter as IDW
         import cv2
         import utils.Utils as TU
     except ImportError as ie:
@@ -132,7 +134,8 @@ if __name__ == '__main__':
 
         train(learnPath, options.threshold) #TODO: Add saving of the DBASE
 
-        print "done learning"
+        print "done learning, however forgot the knowledge... therefore"
+        raise NotImplementedError("Needs adding knowledge saving")
 
     elif (options.runType == "test"):
         if len(args) < 3:
@@ -142,7 +145,7 @@ if __name__ == '__main__':
         testPath = args[0]
         outPath = args[1]
 
-        raise NotImplementedError("To be added")
+        raise NotImplementedError("Needs adding knowledge loading")
 
     elif  (options.runType == "full"):
         if len(args) < 3:
@@ -155,13 +158,9 @@ if __name__ == '__main__':
 
         trainedObjects = train(learnPath, options.threshold)
         cvUtilities = TU.Utils(options.threshold)
-#
-#        for obj in trainedObjects:
-#            for orient in obj.orientations:
-#                print len(orient[1]), len(orient[2])
-#
-#                
-        bestMatches = list()
+        
+        imageDescWriter = IDW.ImageDescriptionWriter()
+        
         for file1 in os.listdir(args[1]):
 
             # do not use .* files
@@ -178,11 +177,18 @@ if __name__ == '__main__':
             match = matcher.matchObject(testImage)
             print "Found match for file '%s'" % file1
 
-            bestMatches.append(match)
+            # save output
+            imgOutPath = os.path.join(outPath,file1)
+            if not os.path.exists(imgOutPath):
+                os.mkdir(imgOutPath)
+            else :
+                shutil.rmtree(imgOutPath)
+                os.mkdir(imgOutPath)
+            
+            for obj in match:
+                print "Object Name: ", obj[0].name
+                print "OrientationName: ", obj[0].orientations[obj[1]][0].name
+                with open(os.path.join(imgOutPath,obj[0].name)+".imd", 'w') as fileStream:
+                    imageDescWriter.write(fileStream, obj[0].orientations[obj[1]][0])
 
-        # TODO: do something with the found bestMatches ;)
-        
-        for match in bestMatches:
-            print "Object Name: ", match[0][0].name
-            print "OrientationName: ", match[0][0].orientations[match[0][1]][0].name
         print "done full"
