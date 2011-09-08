@@ -90,7 +90,7 @@ def train(learningPath, threshold=400):
                 (keypoints, descriptors) = trainingUtils.findSURF(image, threshold)
 
                 # adding orientation to trainedObject
-                trainedObject.addOrientation(threshold, (imageDesc, keypoints, descriptors))
+                trainedObject.addOrientation(threshold, (imageDesc, keypoints, descriptors, imagePath))
 
             # once trained all orientations we can add the object to the DBase
             trainedObjects.append(trainedObject)
@@ -198,9 +198,7 @@ if __name__ == '__main__':
                     with open(os.path.join(imgOutPath, "computed") + ".imd", 'w') as fileStream:
                         imageDescWriter.write(fileStream, obj[0].orientations[obj[1]][0])
                         
-                    #below is a badSmell workaround
-                    matchedPath = obj[0].orientations[obj[1]][0].name.replace("scripts","renders").replace("runner.","violin.runner.")
-
+                    matchedPath = obj[0].orientations[obj[1]][3]
                     #show the match
                     matchedImage = cv2.imread(matchedPath, cv2.IMREAD_GRAYSCALE) 
                     vis = utils.draw_match(matchedImage, testImage, obj[4][0], obj[4][1], obj[2], obj[3])
