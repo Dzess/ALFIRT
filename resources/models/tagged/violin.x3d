@@ -12,7 +12,7 @@
 <Scene>
 <NavigationInfo headlight="false" visibilityLimit="0.0" type='"EXAMINE","ANY"' avatarSize="0.25, 1.75, 0.75" />
 <Background DEF="World0" groundColor="0.051 0.051 0.051" skyColor="0.051 0.051 0.051" />
-<Viewpoint alfirt:camera="true" DEF="Camera" description='Camera' centerOfRotation="0 0 0" orientation='0 1 0 3.14159' position='0 0 -10' fieldOfView="0.858" /> 
+<Viewpoint alfirt:camera="true" DEF="Camera" description='Camera' centerOfRotation="0 0 0" orientation='0 1 0 3.14159' position='0 0 -6.5' fieldOfView="0.858" /> 
 
 <Collision enabled="false">
                      <Transform alfirt:anchor_translate="0.0 0.0 0.0"
