@@ -11,3 +11,5 @@ ankhazam
 reparse
 jpg
 csv
+minkowski
+standarize

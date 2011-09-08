@@ -53,15 +53,31 @@ def verifyFilesInside(directory, logger):
     y_delta = getDelta(expected.y, computed.y)
     z_delta = getDelta(expected.z, computed.z)
 
-    p_delta = getDelta(expected.p, computed.p)
-    q_delta = getDelta(expected.q, computed.q)
-    r_delta = getDelta(expected.r, computed.r)
+    p_delta = getDeltaRadians(expected.p, computed.p)
+    q_delta = getDeltaRadians(expected.q, computed.q)
+    r_delta = getDeltaRadians(expected.r, computed.r)
 
     sum_delta = x_delta + y_delta + z_delta + p_delta + q_delta + r_delta
     return (x_delta, y_delta, z_delta, p_delta, q_delta, r_delta, sum_delta)
 
 def getDelta(a, b):
-    return math.fabs(a - b)
+    '''
+        Returns the Minkowski level 1 distance between a,b
+    '''
+    return round(math.fabs(a - b), 4)
+
+def getDeltaRadians(a, b):
+    '''
+        Returns absolute value in modulo arithmetic (2*pi)
+    '''
+
+    # standarize the a,b
+    std_a = a % (2 * math.pi)
+    std_b = b % (2 * math.pi)
+
+    diff = math.fabs(std_a - std_b)
+
+    return round(diff, 4)
 
 def saveCSVOutput(resutl_file_name, results, logger):
     logger.info("Saving output into file name '%s'" % resutl_file_name)
