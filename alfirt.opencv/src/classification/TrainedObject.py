@@ -16,7 +16,7 @@ class TrainedObject(object):
         
         @param name: Name of the object
         @param surfThreshold: used for training the orientations
-        @param orientations: list of  tuples: (@see ImageDescription, surfKeypoints, surfDescriptors)
+        @param orientations: list of  tuples: (@see ImageDescription, surfKeypoints, surfDescriptors, ImagePath)
         '''
         self.name = name
         self.surfThreshold = surfThreshold
@@ -31,7 +31,7 @@ class TrainedObject(object):
         Adds new orientation to the list of learnt orientations.
         
         @param threshold: surfThreshold used for aquiring the orientation, must be equal to the objects set threshold.
-        @param orientation: (@see ImageDescription, surfKeypoints, surfDescriptors)
+        @param orientation: (@see ImageDescription, surfKeypoints, surfDescriptors, ImagePath)
         '''
         
         # checks for equality of threshold and on first adding allows setting the threshold        

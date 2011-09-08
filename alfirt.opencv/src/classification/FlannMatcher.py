@@ -127,7 +127,6 @@ class FlannMatcher(object):
             ind = 0
 
             for orientation in trainedObject.orientations:
-                #print len(orientation[1])
                 # we are using flannMatcher, can change to bruteForce'''
                 matchResult = self.__matchWithGivenflann(orientation[2], flannIndex) # optimized with preGenerated FlannIndex
                 # matchResult = self.__matchUsingBruteforce(orientation[2], desc) # we can use Brute
@@ -141,10 +140,10 @@ class FlannMatcher(object):
                     #print "Orientation name: ", orientation[0].name
                     #print '%d / %d  inliers/matched' % (np.sum(status), len(status))
 
-                    if (bestMatchObject is None) or (np.sum(status) > np.sum(bestMatchObject[2])) :
-                        #print "Set new best match with len: ", len(status)
-                        #print "Index: ", ind
-                        #print "New Orientation name: ", orientation[0].name
+                    if ((bestMatchObject is None and np.sum(status) > 0) 
+                        or (np.sum(status) > np.sum(bestMatchObject[2]) 
+                        or (np.sum(status) == np.sum(bestMatchObject[2]) and len(status) > len(bestMatchObject[2])))
+                        ) :
                         bestMatchObject = (trainedObject, ind, status, H, (matched_p1, matched_p2))                    
                 except :
                     None
@@ -153,8 +152,8 @@ class FlannMatcher(object):
                 ind += 1
 
             # appends to the results the best match for each TrainedObject
-#            print "AppendingBestRelutionObject: ", len(bestMatchObject[2])
-            bestMatches.append(bestMatchObject)
+            if bestMatchObject is not None:
+                bestMatches.append(bestMatchObject)
 
         return bestMatches
 
