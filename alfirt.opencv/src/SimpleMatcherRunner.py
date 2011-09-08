@@ -157,7 +157,8 @@ if __name__ == '__main__':
         outPath = args[2]
 
         # clean up the output first !
-        shutil.rmtree(outPath)
+        if os.path.exists(outPath):
+            shutil.rmtree(outPath)
         os.mkdir(outPath)
 
         trainedObjects = train(learnPath, options.threshold)

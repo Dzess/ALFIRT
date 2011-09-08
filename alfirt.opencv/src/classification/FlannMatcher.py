@@ -139,13 +139,14 @@ class FlannMatcher(object):
                     #print "Orientation name: ", orientation[0].name
                     #print '%d / %d  inliers/matched' % (np.sum(status), len(status))
 
-                    if (bestMatchObject is None) or (len(status) > len(bestMatchObject[2])) :
+                    if (bestMatchObject is None) or (np.sum(status)> np.sum(bestMatchObject[2])) :
                         #print "Set new best match with len: ", len(status)
                         #print "Index: ", ind
                         #print "New Orientation name: ", orientation[0].name
                         bestMatchObject = (trainedObject, ind, status, H)                    
                 except :
-                    print "Flann homography matrix error"
+                    None
+                    #print "Flann homography matrix error"
 
                 ind += 1
 
