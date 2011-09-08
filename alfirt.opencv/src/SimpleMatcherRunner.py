@@ -184,17 +184,28 @@ if __name__ == '__main__':
 
                 # flags are set to 0 = meaning grey scale
                 testImage = cv2.imread(os.path.join(args[1], file1), flags=0)
+                utils = TU.Utils(options.threshold)
+                (kp, desc) = utils.findSURF(testImage, options.threshold)                
                 print "Loaded test image : '%s'" % file1
 
                 matcher = FM.FlannMatcher(trainedObjects, options.threshold)
                 match = matcher.matchObject(testImage)
                 print "Found match for file '%s'" % file1
-
+                
                 for obj in match:
                     print "Object Name: ", obj[0].name
                     print "OrientationName: ", obj[0].orientations[obj[1]][0].name
                     with open(os.path.join(imgOutPath, "computed") + ".imd", 'w') as fileStream:
                         imageDescWriter.write(fileStream, obj[0].orientations[obj[1]][0])
+                        
+                    #below is a badSmell workaround
+                    matchedPath = obj[0].orientations[obj[1]][0].name.replace("scripts","renders").replace("runner.","violin.runner.")
+
+                    #show the match
+                    matchedImage = cv2.imread(matchedPath, cv2.IMREAD_GRAYSCALE) 
+                    vis = utils.draw_match(matchedImage, testImage, obj[4][0], obj[4][1], obj[2], obj[3])
+                    cv2.imshow("match!", vis)
+                    cv2.waitKey()
 
             # with .imd files to this
             else :
@@ -205,3 +216,4 @@ if __name__ == '__main__':
 
 
         print "done full"
+
