@@ -156,39 +156,51 @@ if __name__ == '__main__':
         testPath = args[1]
         outPath = args[2]
 
+        # clean up the output first !
+        shutil.rmtree(outPath)
+        os.mkdir(outPath)
+
         trainedObjects = train(learnPath, options.threshold)
         cvUtilities = TU.Utils(options.threshold)
-        
+
         imageDescWriter = IDW.ImageDescriptionWriter()
-        
+
         for file1 in os.listdir(args[1]):
 
             # do not use .* files
             if file1.startswith("."):
                 continue
 
-            # flags are set to 0 = meaning grey scale
-            testImage = cv2.imread(os.path.join(args[1], file1), flags=0)
-            print "Loaded test image : '%s'" % file1
-
-            matcher = FM.FlannMatcher(trainedObjects, options.threshold)
-            print "Getting matcher"
-
-            match = matcher.matchObject(testImage)
-            print "Found match for file '%s'" % file1
-
-            # save output
-            imgOutPath = os.path.join(outPath,file1)
+            # save output (the name of the object without .bmp / .jpg etc)
+            fileName = os.path.basename(file1)
+            fileName = os.path.splitext(fileName)[0]
+            imgOutPath = os.path.join(outPath, fileName)
             if not os.path.exists(imgOutPath):
                 os.mkdir(imgOutPath)
+
+            # with image files do ...
+            if not file1.endswith(".imd"):
+
+                # flags are set to 0 = meaning grey scale
+                testImage = cv2.imread(os.path.join(args[1], file1), flags=0)
+                print "Loaded test image : '%s'" % file1
+
+                matcher = FM.FlannMatcher(trainedObjects, options.threshold)
+                match = matcher.matchObject(testImage)
+                print "Found match for file '%s'" % file1
+
+                for obj in match:
+                    print "Object Name: ", obj[0].name
+                    print "OrientationName: ", obj[0].orientations[obj[1]][0].name
+                    with open(os.path.join(imgOutPath, "computed") + ".imd", 'w') as fileStream:
+                        imageDescWriter.write(fileStream, obj[0].orientations[obj[1]][0])
+
+            # with .imd files to this
             else :
-                shutil.rmtree(imgOutPath)
-                os.mkdir(imgOutPath)
-            
-            for obj in match:
-                print "Object Name: ", obj[0].name
-                print "OrientationName: ", obj[0].orientations[obj[1]][0].name
-                with open(os.path.join(imgOutPath,obj[0].name)+".imd", 'w') as fileStream:
-                    imageDescWriter.write(fileStream, obj[0].orientations[obj[1]][0])
+                src = os.path.join(args[1], file1)
+                dst = os.path.join(imgOutPath, "expected.imd")
+                print "Coping the file '%s' into '%s'" % (src, dst)
+                shutil.copyfile(src, dst)
+
 
         print "done full"

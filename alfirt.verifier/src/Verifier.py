@@ -18,8 +18,7 @@ import os
 
 usageMessage = '''
 python3 Verifier.py 
-    input_directory_with_resulted_image_descriptions
-    input_directory_with_original_image_descriptions
+    input_folder
     output_directory
                '''
 
@@ -30,18 +29,15 @@ if __name__ == '__main__':
     logger = logging.getLogger()
     logger.setLevel(level=logging.INFO)
 
-    if len(sys.argv) < 4:
+    if len(sys.argv) < 3:
         logger.warn("Please use program with command line options \n%s", usageMessage)
         sys.exit(1)
 
     logger.info("Checking directories names")
     test_folder = os.path.abspath(sys.argv[1])
-    original_folder = os.path.abspath(sys.argv[2])
-
-    output_folder = os.path.abspath(sys.argv[3])
+    output_folder = os.path.abspath(sys.argv[2])
 
     logger.info("Test   folder: '%s'", test_folder)
-    logger.info("Origin folder: '%s'", original_folder)
     logger.info("Output folder: '%s'", output_folder)
 
     # read from each file out of this folder the structure 

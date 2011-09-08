@@ -9,3 +9,4 @@ hessian
 dzess
 ankhazam
 reparse
+jpg
