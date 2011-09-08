@@ -89,7 +89,9 @@ class FlannMatcher(object):
         @param surfThreshold: Threshold for Hessian detector in SURF method used for training the objects.
         This method adapts however this threshold automatically basing on the read from each TrainedObject.
           
-        @return: List of tuples (TrainedObject, bestMatchOrientationIndex, homographyStatus, homographyMatrix)
+        @return: List of tuples (TrainedObject, bestMatchOrientationIndex, 
+                                homographyStatus, homographyMatrix,
+                                (matchedPointsInTrained, matchedPointsInTest) )
         '''
         # create new surf extractor only if needed
         if (surfThreshold is not None) and (surfThreshold != self.surfThreshold):
@@ -139,11 +141,11 @@ class FlannMatcher(object):
                     #print "Orientation name: ", orientation[0].name
                     #print '%d / %d  inliers/matched' % (np.sum(status), len(status))
 
-                    if (bestMatchObject is None) or (np.sum(status)> np.sum(bestMatchObject[2])) :
+                    if (bestMatchObject is None) or (np.sum(status) > np.sum(bestMatchObject[2])) :
                         #print "Set new best match with len: ", len(status)
                         #print "Index: ", ind
                         #print "New Orientation name: ", orientation[0].name
-                        bestMatchObject = (trainedObject, ind, status, H)                    
+                        bestMatchObject = (trainedObject, ind, status, H, (matched_p1, matched_p2))                    
                 except :
                     None
                     #print "Flann homography matrix error"
