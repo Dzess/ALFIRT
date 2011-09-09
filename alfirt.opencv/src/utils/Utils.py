@@ -57,7 +57,7 @@ class Utils(object):
         return keypoints, descriptors
 
 
-    def drawKeypoints(self, image, keypoints):
+    def drawKeypoints(self, image, keypoints, color=(0, 0, 255)):
         '''
         Draws SURF extracted keypoints fully emphasizing discovered features (center,response,angle).
         
@@ -69,7 +69,6 @@ class Utils(object):
             radius = int(keypoint.size / 2)
             center = (int(keypoint.pt[0]), int(keypoint.pt[1]))
 
-            color = (0, 0, 255)
             # draw circle in center
             cv2.circle(image, center, radius, color)
 

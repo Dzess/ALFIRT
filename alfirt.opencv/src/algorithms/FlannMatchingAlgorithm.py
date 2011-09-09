@@ -122,6 +122,11 @@ class FlannMatchingAlgorithm(AlgorithmBase):
                 (kp, desc) = utils.findSURF(testImage, self.threashold)
                 print "Loaded test image : '%s'" % file1
 
+                kpImage = cv2.imread(os.path.join(inputFolder, file1))
+                utils.drawKeypoints(kpImage, kp, color=(255, 255, 0))
+                cv2.imwrite(os.path.join(outputFolder, file1), kpImage)
+
+
                 matcher = FM.FlannMatcher(self.trainedObjects, self.threashold)
                 match = matcher.matchObject(testImage)
                 print "Found match for file '%s'" % file1
