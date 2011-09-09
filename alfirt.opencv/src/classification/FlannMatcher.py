@@ -63,7 +63,7 @@ class FlannMatcher(object):
         return pairs[mask]
 
 
-    def __matchWithGivenflann(self, desc1, flannIndex, r_threshold=0.6):
+    def __matchWithGivenflann(self, desc1, flannIndex, r_threshold=0.4):
         '''
         Internal flann descriptors matcher in order to find the best match.
         
@@ -136,7 +136,7 @@ class FlannMatcher(object):
                 #print len(matched_p1), len(matched_p2)
 
                 try:
-                    H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)
+                    H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 2.0)
                     #print "Orientation name: ", orientation[0].name
                     #print '%d / %d  inliers/matched' % (np.sum(status), len(status))
 

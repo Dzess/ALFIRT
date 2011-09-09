@@ -1,15 +1,15 @@
 '''
 Created on Sep 9, 2011
 
-@author: Piotr
+@author: Ankhazam & Piotr & OpenCV team
 '''
 from algorithms.AlgorithmBase import AlgorithmBase
 import classification.FlannMatcher as FM
 import classification.TrainedObject as TO
 import image.ImageDescriptionReader as IDR
 import image.ImageDescriptionWriter as IDW
-import cv2
 import utils.Utils as TU
+import cv2
 import os
 import shutil
 
@@ -22,7 +22,7 @@ class FlannMatchingAlgorithm(AlgorithmBase):
         '''
             Constructor
         '''
-        self.threashold = threashold
+        self.threshold = threashold
 
 
     def __train(self, learningPath):
@@ -46,7 +46,7 @@ class FlannMatchingAlgorithm(AlgorithmBase):
 
         trainedObjects = list() # list of trained objects
 
-        trainingUtils = TU.Utils(self.threashold)
+        trainingUtils = TU.Utils(self.threshold)
 
         for (root, dirs, files) in os.walk(learningPath):
             if len(dirs) == 0: # we're in an object folder
@@ -56,22 +56,17 @@ class FlannMatchingAlgorithm(AlgorithmBase):
                 print "root: ", objName
 
                 # currently trained object
-                trainedObject = TO.TrainedObject(objName, self.threashold)
-
-                # orientation list cleanup
-                orientationNames = list()
-                for file1 in files:
-                    orientationNames.append(file1[:-4])
+                trainedObject = TO.TrainedObject(objName, self.threshold)
 
                 # real training
-                for file1 in set(orientationNames): # we won't implement natural human sorting
+                for file1 in files: # we won't implement natural human sorting
 
-                    # do not use .* files
-                    if file1.startswith('.'):
+                    # do not use .* and *.imd files
+                    if file1.startswith('.') or file1.endswith(".imd"):
                         continue
 
                     # fetching ImageDescription
-                    imDescPath = os.path.join(root, file1) + ".imd"
+                    imDescPath = os.path.join(root, file1[:-4]) + ".imd"
                     print "imd: ", imDescPath
                     with open(imDescPath, 'r') as imDF:
                         # read this file using reader
@@ -79,12 +74,12 @@ class FlannMatchingAlgorithm(AlgorithmBase):
                         imageDesc = reader.read(imDF)
 
                     # fetching relevant SURF features
-                    imagePath = os.path.join(root, file1) + ".bmp" # TODO: Multiple image types!!!
+                    imagePath = os.path.join(root, file1)
                     image = cv2.imread(imagePath)
-                    (keypoints, descriptors) = trainingUtils.findSURF(image, self.threashold)
+                    (keypoints, descriptors) = trainingUtils.findSURF(image, self.threshold)
 
                     # adding orientation to trainedObject
-                    trainedObject.addOrientation(self.threashold, (imageDesc, keypoints, descriptors, imagePath))
+                    trainedObject.addOrientation(self.threshold, (imageDesc, keypoints, descriptors, imagePath))
 
                 # once trained all orientations we can add the object to the DBase
                 trainedObjects.append(trainedObject)
@@ -96,7 +91,7 @@ class FlannMatchingAlgorithm(AlgorithmBase):
 
     def test(self, inputFolder, outputFolder):
 
-        cvUtilities = TU.Utils(self.threashold)
+        cvUtilities = TU.Utils(self.threshold)
 
         imageDescWriter = IDW.ImageDescriptionWriter()
 
@@ -118,16 +113,15 @@ class FlannMatchingAlgorithm(AlgorithmBase):
 
                 # flags are set to 0 = meaning grey scale
                 testImage = cv2.imread(os.path.join(inputFolder, file1), flags=0)
-                utils = TU.Utils(self.threashold)
-                (kp, desc) = utils.findSURF(testImage, self.threashold)
+                utils = TU.Utils(self.threshold)
+                (kp, desc) = utils.findSURF(testImage, self.threshold)
                 print "Loaded test image : '%s'" % file1
 
                 kpImage = cv2.imread(os.path.join(inputFolder, file1))
                 utils.drawKeypoints(kpImage, kp, color=(255, 255, 0))
                 cv2.imwrite(os.path.join(outputFolder, file1), kpImage)
 
-
-                matcher = FM.FlannMatcher(self.trainedObjects, self.threashold)
+                matcher = FM.FlannMatcher(self.trainedObjects, self.threshold)
                 match = matcher.matchObject(testImage)
                 print "Found match for file '%s'" % file1
 
