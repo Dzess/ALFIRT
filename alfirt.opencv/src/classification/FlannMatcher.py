@@ -132,7 +132,7 @@ class FlannMatcher(object):
                 # matchResult = self.__matchUsingBruteforce(orientation[2], desc) # we can use Brute
                 matched_p1 = np.array([orientation[1][i].pt for i, j in matchResult])
                 matched_p2 = np.array([kp[j].pt for i, j in matchResult])
-                
+
                 #print len(matched_p1), len(matched_p2)
 
                 try:
@@ -140,13 +140,13 @@ class FlannMatcher(object):
                     #print "Orientation name: ", orientation[0].name
                     #print '%d / %d  inliers/matched' % (np.sum(status), len(status))
 
-                    if ((bestMatchObject is None and np.sum(status) > 0) 
-                        or (np.sum(status) > np.sum(bestMatchObject[2]) 
+                    if ((bestMatchObject is None and np.sum(status) > 0)
+                        or (np.sum(status) > np.sum(bestMatchObject[2])
                         or (np.sum(status) == np.sum(bestMatchObject[2]) and len(status) > len(bestMatchObject[2])))
                         ) :
-                        bestMatchObject = (trainedObject, ind, status, H, (matched_p1, matched_p2))                    
+                        bestMatchObject = (trainedObject, ind, status, H, (matched_p1, matched_p2))
                 except :
-                    None
+                    pass
                     #print "Flann homography matrix error"
 
                 ind += 1
