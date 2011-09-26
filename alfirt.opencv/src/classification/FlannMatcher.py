@@ -81,11 +81,13 @@ class FlannMatcher(object):
 
 
 
-    def matchObject(self, image, surfThreshold=None):
+    def matchObject(self, image, matchMethod="flann", useRansac = 1, surfThreshold=None):
         '''
         Finds best match for each object in the database.
         
         @param image: Image with object(s) to be found.
+        @param matchMetod: flann or brute to select the matcher
+        @param useRansac: 1/0 defining the optional use of RANSAC in homography matrix search.
         @param surfThreshold: Threshold for Hessian detector in SURF method used for training the objects.
         This method adapts however this threshold automatically basing on the read from each TrainedObject.
           
@@ -128,8 +130,11 @@ class FlannMatcher(object):
 
             for orientation in trainedObject.orientations:
                 # we are using flannMatcher, can change to bruteForce'''
-                matchResult = self.__matchWithGivenflann(orientation[2], flannIndex) # optimized with preGenerated FlannIndex
-                # matchResult = self.__matchUsingBruteforce(orientation[2], desc) # we can use Brute
+                if matchMethod == "flann":
+                    matchResult = self.__matchWithGivenflann(orientation[2], flannIndex) # optimized with preGenerated FlannIndex
+                else:
+                    matchResult = self.__matchUsingBruteforce(orientation[2], desc) # we can use Brute
+                    
                 if len(matchResult) > 10:
                 
                     matched_p1 = np.array([orientation[1][i].pt for i, j in matchResult])
@@ -138,7 +143,7 @@ class FlannMatcher(object):
                     #print len(matched_p1), len(matched_p2)
 
 
-                    H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)
+                    H, status = cv2.findHomography(matched_p1, matched_p2, (0, cv2.RANSAC)[useRansac], 5.0)
                     #print "Orientation name: ", orientation[0].name
                     #print '%d / %d  inliers/matched' % (np.sum(status), len(status))
 

@@ -8,7 +8,7 @@ import classification.FlannMatcher as FM
 import classification.TrainedObject as TO
 import image.ImageDescriptionReader as IDR
 import image.ImageDescriptionWriter as IDW
-import utils.Utils as TU
+import common.Utils as TU
 import cv2
 import os
 import shutil
