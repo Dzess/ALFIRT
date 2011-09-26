@@ -9,6 +9,7 @@ from optparse import OptionParser
 import sys
 import os
 import shutil
+from algorithms import NewFlannMatchingAlgorithm
 
 def pathSetUp():
     print "Setting up internal paths to PYTHONPATH"
@@ -88,7 +89,7 @@ if __name__ == '__main__':
         os.mkdir(outPath)
 
         # running the algorithm
-        algorithm = FlannMatchingAlgorithm(400)
+        algorithm = NewFlannMatchingAlgorithm.NewFlannMatchingAlgorithm()
 
         algorithm.learn(learnPath)
         algorithm.test(testPath, outPath)
