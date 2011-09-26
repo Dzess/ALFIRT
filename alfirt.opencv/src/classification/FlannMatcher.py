@@ -130,13 +130,15 @@ class FlannMatcher(object):
                 # we are using flannMatcher, can change to bruteForce'''
                 matchResult = self.__matchWithGivenflann(orientation[2], flannIndex) # optimized with preGenerated FlannIndex
                 # matchResult = self.__matchUsingBruteforce(orientation[2], desc) # we can use Brute
-                matched_p1 = np.array([orientation[1][i].pt for i, j in matchResult])
-                matched_p2 = np.array([kp[j].pt for i, j in matchResult])
+                if len(matchResult) > 10:
+                
+                    matched_p1 = np.array([orientation[1][i].pt for i, j in matchResult])
+                    matched_p2 = np.array([kp[j].pt for i, j in matchResult])
 
-                #print len(matched_p1), len(matched_p2)
+                    #print len(matched_p1), len(matched_p2)
 
-                try:
-                    H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 2.0)
+
+                    H, status = cv2.findHomography(matched_p1, matched_p2, cv2.RANSAC, 5.0)
                     #print "Orientation name: ", orientation[0].name
                     #print '%d / %d  inliers/matched' % (np.sum(status), len(status))
 
@@ -145,9 +147,6 @@ class FlannMatcher(object):
                         or (np.sum(status) == np.sum(bestMatchObject[2]) and len(status) > len(bestMatchObject[2])))
                         ) :
                         bestMatchObject = (trainedObject, ind, status, H, (matched_p1, matched_p2))
-                except :
-                    pass
-                    #print "Flann homography matrix error"
 
                 ind += 1
 
