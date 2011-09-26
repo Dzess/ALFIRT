@@ -123,7 +123,7 @@ class FlannMatchingAlgorithm(AlgorithmBase):
 
                 matcher = FM.FlannMatcher(self.trainedObjects, self.threshold)
                 match = matcher.matchObject(testImage)
-                print "Found match for file '%s'" % file1
+                print "Finished processing file '%s'" % file1
 
                 for obj in match:
                     print "Object Name: ", obj[0].name
