@@ -9,7 +9,7 @@ from optparse import OptionParser
 import sys
 import os
 import shutil
-from algorithms import NewFlannMatchingAlgorithm
+from algorithms import ORBFlannMatchingAlgorithm
 
 def pathSetUp():
     print "Setting up internal paths to PYTHONPATH"
@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     # proceed with imports
     try:
-        from algorithms.FlannMatchingAlgorithm import FlannMatchingAlgorithm
+        from algorithms.SURFFlannMatchingAlgorithm import SURFFlannMatchingAlgorithm
     except ImportError as ie:
         print "Importing not successful"
         print ie
@@ -89,7 +89,7 @@ if __name__ == '__main__':
         os.mkdir(outPath)
 
         # running the algorithm
-        algorithm = NewFlannMatchingAlgorithm.NewFlannMatchingAlgorithm()
+        algorithm = ORBFlannMatchingAlgorithm.ORBFlannMatchingAlgorithm()
 
         algorithm.learn(learnPath)
         algorithm.test(testPath, outPath)

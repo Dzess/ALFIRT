@@ -10,7 +10,7 @@ import numpy as np
 import cv2
 from common import anorm
 
-class NewFlannMatcher(object):
+class ORBFlannMatcher(object):
     '''
     Main recognition and training module.
     '''
@@ -22,9 +22,9 @@ class NewFlannMatcher(object):
     FLANN_INDEX_KDTREE = 1
     FLANN_INDEX_LSH    = 6
     flann_params= dict(algorithm = FLANN_INDEX_LSH,
-                   table_number = 6, # 12
-                   key_size = 12,     # 20
-                   multi_probe_level = 1) #2
+                   table_number = 12, # 12
+                   key_size = 20,     # 20
+                   multi_probe_level = 2) #2
     matcher = cv2.FlannBasedMatcher(flann_params, {})  # bug : need to pass empty dict (#1329)
 
     def __init__(self, trainedObjects):
