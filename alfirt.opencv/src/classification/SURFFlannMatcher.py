@@ -10,7 +10,7 @@ import numpy as np
 import cv2
 from common import anorm
 
-class FlannMatcher(object):
+class SURFFlannMatcher(object):
     '''
     Main recognition and training module.
     '''
